@@ -1,0 +1,119 @@
+<app-banner
+  title="Contact Us"
+  subtitle="We'd love to hear from you. Reach out anytime."
+  background="default">
+</app-banner>
+
+<section class="contact-page">
+
+  <div class="contact-grid">
+
+    <!-- LEFT: FORM -->
+    <div class="card form-card">
+      <h2>Send Us a Message</h2>
+      <p class="subtext">
+        Have questions about our products or need assistance? Fill out the form and we'll get back to you.
+      </p>
+
+      <form #contactForm="ngForm" (ngSubmit)="onSubmit(contactForm)" novalidate>
+
+        <label class="field">
+          <span>Name <span class="req">*</span></span>
+          <input
+            type="text"
+            name="name"
+            [(ngModel)]="formData.name"
+            required
+            minlength="2"
+            placeholder="Your full name"
+          />
+          <small class="error" *ngIf="contactForm.submitted && contactForm.controls['name']?.invalid">
+            Name is required (min 2 characters).
+          </small>
+        </label>
+
+        <label class="field">
+          <span>Email <span class="req">*</span></span>
+          <input
+            type="email"
+            name="email"
+            [(ngModel)]="formData.email"
+            required
+            email
+            placeholder="you@email.com"
+          />
+          <small class="error" *ngIf="contactForm.submitted && contactForm.controls['email']?.invalid">
+            Please enter a valid email.
+          </small>
+        </label>
+
+        <label class="field">
+          <span>Subject</span>
+          <input
+            type="text"
+            name="subject"
+            [(ngModel)]="formData.subject"
+            placeholder="What is this regarding?"
+          />
+        </label>
+
+        <label class="field">
+          <span>Message <span class="req">*</span></span>
+          <textarea
+            name="message"
+            [(ngModel)]="formData.message"
+            required
+            minlength="10"
+            rows="5"
+            placeholder="Write your message here..."
+          ></textarea>
+          <small class="error" *ngIf="contactForm.submitted && contactForm.controls['message']?.invalid">
+            Message is required (min 10 characters).
+          </small>
+        </label>
+
+        <button class="send-btn" type="submit" [disabled]="isSubmitting">
+          <span class="plane">&#9992;</span>
+          {{ isSubmitting ? 'Sending...' : 'Send Message' }}
+        </button>
+
+        <p class="success" *ngIf="successMessage">{{ successMessage }}</p>
+        <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+      </form>
+    </div>
+
+    <!-- RIGHT: CONTACT CARDS -->
+    <div class="side">
+
+      <div class="card info-card">
+        <h3>Email</h3>
+        <p class="big"><a class="contact-link" href="mailto:info@diasfragrance.com">info@diasfragrance.com</a></p>
+        <p class="muted">We typically respond within 5 minutes-1 hour.</p>
+      </div>
+
+      <div class="card info-card">
+        <h3>Phone</h3>
+        <p class="big"><a class="contact-link" href="tel:+18764968099">+1 (876) 496-8099</a></p>
+        <p class="muted">Mon - Fri: 9:00 AM - 6:00 PM</p>
+      </div>
+
+      <div class="card info-card">
+        <h3>Visit Us</h3>
+        <p class="big">
+          Spanish Town, Jamaica
+        </p>
+        <p class="muted">Store hours: Mon - Sat: 10:00 AM - 6:00 PM</p>
+      </div>
+
+      <div class="card feedback-card">
+        <h3>Feedback</h3>
+        <p class="muted">
+          Your feedback helps us improve! Whether it's a compliment, concern, or suggestion, we value your input.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+

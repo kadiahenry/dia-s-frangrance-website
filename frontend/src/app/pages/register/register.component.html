@@ -1,0 +1,78 @@
+<app-banner
+  title="Create Account"
+  subtitle="Sign up for faster checkout, wishlist access, and order history."
+  background="default"
+  [hideBreadcrumbs]="true">
+</app-banner>
+
+<section class="register-page">
+  <div class="register-card">
+    <h2>Create Your Account</h2>
+    <p class="register-subtext">
+      Save your details, track your orders, and manage your account in one place.
+    </p>
+
+    <form [formGroup]="registerForm" (ngSubmit)="register()">
+      <div class="form-group">
+        <label for="register-name">Full Name</label>
+        <input
+          type="text"
+          id="register-name"
+          formControlName="name"
+          autocomplete="name"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="register-email">Email Address</label>
+        <input
+          type="email"
+          id="register-email"
+          formControlName="email"
+          autocomplete="email"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="register-password">Password</label>
+        <input
+          type="password"
+          id="register-password"
+          formControlName="password"
+          autocomplete="new-password"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="register-confirm-password">Confirm Password</label>
+        <input
+          type="password"
+          id="register-confirm-password"
+          formControlName="confirmPassword"
+          autocomplete="new-password"
+        />
+      </div>
+
+      <label class="consent-checkbox" for="register-privacy-consent">
+        <input
+          type="checkbox"
+          id="register-privacy-consent"
+          formControlName="privacyConsent"
+        />
+        <span>
+          I agree to the <a routerLink="/privacy" class="text-link">Privacy Policy</a> and consent to the collection of my personal information.
+        </span>
+      </label>
+
+      <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+      <button type="submit" class="register-btn">
+        {{ isSubmitting ? 'Creating Account...' : 'Create Account' }}
+      </button>
+    </form>
+
+    <p class="register-note">
+      Already have an account? <a routerLink="/login" class="text-link">Log in</a>
+    </p>
+  </div>
+</section>

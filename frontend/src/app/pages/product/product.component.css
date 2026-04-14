@@ -1,0 +1,128 @@
+.product-page {
+  padding: 30px 20px;
+  background: linear-gradient(180deg, #fffdfd 0%, #fff4f8 100%);
+}
+
+.product-container {
+  max-width: 1100px;
+  margin: auto;
+  display: flex;
+  gap: 35px;
+  align-items: flex-start;
+}
+
+.product-image img {
+  width: 100%;
+  max-width: 450px;
+  border-radius: 12px;
+  object-fit: cover;
+  background: var(--color-background-soft);
+  box-shadow: 0 18px 36px var(--color-shadow);
+}
+
+.product-details {
+  flex: 1;
+}
+
+.product-details h1 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.category, .type {
+  color: var(--color-text-muted);
+  margin: 6px 0;
+}
+
+.price {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: var(--color-contrast);
+  margin: 15px 0;
+}
+
+.description {
+  line-height: 1.6;
+  margin-bottom: 18px;
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 18px 0;
+}
+
+.quantity-controls button {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: var(--color-surface-strong);
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.add-btn {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-contrast));
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 12px 24px var(--color-shadow);
+}
+
+.add-btn:hover {
+  background: linear-gradient(135deg, var(--color-primary-strong), var(--color-contrast-soft));
+}
+
+.wish-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.6rem;
+  cursor: pointer;
+
+  /* outline heart */
+  color: transparent;
+  -webkit-text-stroke: 1.6px var(--color-primary);
+}
+
+.wish-btn.active {
+  color: var(--color-primary);
+  -webkit-text-stroke: 0;
+}
+
+.back-link {
+  text-decoration: none;
+  color: var(--color-text-muted);
+}
+
+.not-found {
+  padding: 40px 20px;
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .product-container {
+    flex-direction: column;
+  }
+
+  .product-image img {
+    max-width: 100%;
+  }
+
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

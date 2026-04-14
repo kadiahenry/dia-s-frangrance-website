@@ -1,0 +1,145 @@
+/* footer main */
+.footer {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-contrast));
+  color: #ffffff;
+  padding: 25px 20px 10px;
+  font-size: 14px;
+  margin-top: 40px;
+  min-height: 320px;
+}
+
+/* top section */
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 25px;
+  max-width: 1000px;
+  margin: 0 auto 20px;
+}
+
+/* column */
+.footer-column {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 180px;
+}
+
+.footer-column h3 {
+  margin-bottom: 6px;
+  font-size: 16px;
+}
+
+/* footer links */
+.footer-column a {
+  text-decoration: none;
+  color: #ffffff;
+  opacity: 0.88;
+  transition: opacity 0.3s ease;
+  font-size: 15px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.footer-link-btn {
+  background: none;
+  border: none;
+  color: #ffffff;
+  opacity: 0.88;
+  font-size: 15px;
+  padding: 0;
+  min-height: 44px;
+  text-align: left;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+}
+
+.footer-link-btn--auth {
+  min-height: 44px;
+}
+
+.footer-column a:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.footer-link-btn:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+/* contact info */
+.footer-column p {
+  margin: 0;
+  font-size: 15px;
+  opacity: 0.84;
+}
+
+/* bottom section */
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding-top: 10px;
+  text-align: center;
+}
+
+/* social icons */
+.socials {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 8px;
+}
+
+.socials a {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.social-icon {
+  width: 28px;
+  height: 28px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.social-icon--whatsapp {
+  fill: #25d366;
+}
+
+.social-icon--instagram {
+  fill: #e4405f;
+}
+
+.socials a:hover .social-icon,
+.socials a:focus-visible .social-icon {
+  transform: scale(1.15);
+  opacity: 1;
+}
+
+/* copyright*/
+.copyright {
+  font-size: 14px;
+  opacity: 0.82;
+}
+
+/* responsive */
+@media (max-width: 768px) {
+  .footer-top {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .footer-column {
+    align-items: center;
+  }
+
+  .footer-link-btn {
+    text-align: center;
+  }
+}

@@ -1,0 +1,68 @@
+<app-banner
+  title="FAQ"
+  subtitle="Helpful answers for shopping, shipping, payments, and account support."
+  background="default">
+</app-banner>
+
+<section class="faq-page">
+  <div class="top-callout" role="note" aria-label="Frequently asked questions introduction">
+    <div class="callout-accent" aria-hidden="true"></div>
+    <div class="callout-mark" aria-hidden="true">?</div>
+
+    <div class="callout-copy">
+      <span class="callout-eyebrow">Support Center</span>
+      <h1>Frequently Asked Questions</h1>
+      <p>
+        We pulled together the most common questions customers ask before and after ordering.
+        If you still need help, our support team is only a message away.
+      </p>
+    </div>
+  </div>
+
+  <div class="faq-layout">
+    <section class="section-card faq-list" aria-labelledby="faq-list-title">
+      <div class="section-title">
+        <span class="section-dot" aria-hidden="true"></span>
+        <h2 id="faq-list-title">Common Questions</h2>
+      </div>
+
+      <article class="faq-item" *ngFor="let item of faqs; let index = index">
+        <div class="faq-number" aria-hidden="true">{{ index + 1 < 10 ? '0' + (index + 1) : index + 1 }}</div>
+        <div class="faq-copy">
+          <h3>{{ item.question }}</h3>
+          <p>{{ item.answer }}</p>
+        </div>
+      </article>
+    </section>
+
+    <aside class="section-card support-card" aria-labelledby="faq-support-title">
+      <div class="section-title">
+        <span class="section-dot" aria-hidden="true"></span>
+        <h2 id="faq-support-title">Still Need Help?</h2>
+      </div>
+
+      <p>
+        If your question is not covered here, we are happy to help with order issues,
+        shipping questions, product recommendations, and account support.
+      </p>
+
+      <div class="support-highlight">
+        <strong>Fastest help:</strong>
+        <span>Send us a message through the contact page for order or account support.</span>
+      </div>
+
+      <div class="support-list">
+        <p><strong>Email:</strong> <a href="mailto:support@diasfragrance.com">support@diasfragrance.com</a></p>
+        <p><strong>Phone:</strong> <a href="tel:+18764968099">+1 (876) 496-8099</a></p>
+        <p><strong>Location:</strong> Spanish Town, Jamaica</p>
+      </div>
+
+      <div class="support-actions">
+        <a routerLink="/contact" class="support-button">Contact Us</a>
+        <a routerLink="/shipping" class="support-link">Read Shipping Details</a>
+        <a routerLink="/returns" class="support-link">Read Returns Policy</a>
+      </div>
+    </aside>
+  </div>
+</section>
+

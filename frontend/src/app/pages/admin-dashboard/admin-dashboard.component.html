@@ -1,0 +1,298 @@
+<app-banner
+  title="Admin Dashboard"
+  subtitle="Manage products, orders, and customer activity."
+  background="teal"
+  [hideBreadcrumbs]="true">
+</app-banner>
+
+<section class="admin-dashboard">
+  <div class="admin-overview">
+    <article class="stats-card">
+      <span class="stats-label">Orders</span>
+      <strong>{{ stats.totalOrders }}</strong>
+    </article>
+    <article class="stats-card">
+      <span class="stats-label">Revenue</span>
+      <strong>{{ stats.totalRevenue | currency:'JMD':'symbol':'1.2-2' }}</strong>
+    </article>
+    <article class="stats-card">
+      <span class="stats-label">Customers</span>
+      <strong>{{ stats.totalCustomers }}</strong>
+    </article>
+    <article class="stats-card">
+      <span class="stats-label">Users</span>
+      <strong>{{ stats.totalUsers }}</strong>
+    </article>
+  </div>
+
+  <p class="error-message" *ngIf="dashboardError">{{ dashboardError }}</p>
+
+  <div class="admin-grid">
+    <section class="admin-card">
+      <h2>{{ editingProductId === null ? 'Add Product' : 'Edit Product' }}</h2>
+      <p class="subtext">
+        {{ editingProductId === null
+          ? 'Create a new product and it will appear in the store catalog.'
+          : 'Update the selected product and save your changes.' }}
+      </p>
+
+      <form class="admin-form" (submit)="$event.preventDefault(); saveProduct()">
+        <label>
+          <span>Product Name</span>
+          <input type="text" name="name" [(ngModel)]="form.name" required>
+        </label>
+
+        <label>
+          <span>Category</span>
+          <select name="category" [(ngModel)]="form.category">
+            <option value="Fragrances">Fragrances</option>
+            <option value="Body Wash">Body Wash</option>
+            <option value="Lotion and Body Cream">Lotion and Body Cream</option>
+            <option value="Scrubs">Scrubs</option>
+            <option value="Oils">Oils</option>
+          </select>
+        </label>
+
+        <label>
+          <span>Type</span>
+          <input type="text" name="type" [(ngModel)]="form.type">
+        </label>
+
+        <label>
+          <span>Price</span>
+          <input type="number" min="1" step="0.01" name="price" [(ngModel)]="form.price" required>
+        </label>
+
+        <label>
+          <span>Image Path</span>
+          <input type="text" name="image" [(ngModel)]="form.image" placeholder="assets/images/example.jpg" required>
+        </label>
+
+        <label>
+          <span>Upload Image</span>
+          <input type="file" accept="image/png,image/jpeg,image/webp,image/gif" (change)="onImageSelected($event)">
+          <small class="field-help" *ngIf="selectedImageName">Selected: {{ selectedImageName }}</small>
+          <small class="field-help" *ngIf="!selectedImageName">Choose a file to save the image on the backend, or leave it empty to keep the image path above.</small>
+        </label>
+
+        <label>
+          <span>Description</span>
+          <textarea name="description" rows="4" [(ngModel)]="form.description"></textarea>
+        </label>
+
+        <label>
+          <span>Notes</span>
+          <textarea
+            name="notes"
+            rows="3"
+            [ngModel]="form.notes?.join(', ')"
+            (ngModelChange)="updateNotes($event)"
+            placeholder="rose petals, whipped vanilla"></textarea>
+        </label>
+
+        <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
+        <p class="success-message" *ngIf="successMessage">{{ successMessage }}</p>
+
+        <div class="form-actions">
+          <button type="submit" class="primary-btn" [disabled]="isSaving">
+            {{ isSaving ? 'Saving...' : (editingProductId === null ? 'Add Product' : 'Save Changes') }}
+          </button>
+          <button
+            *ngIf="editingProductId !== null"
+            type="button"
+            class="secondary-btn"
+            (click)="cancelEdit()">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <section class="admin-card">
+      <div class="list-header">
+        <div>
+          <h2>Current Products</h2>
+          <p class="subtext">Edit or delete products that are visible in the shop.</p>
+        </div>
+        <button type="button" class="secondary-btn" (click)="loadProducts()" [disabled]="isLoading">
+          Refresh
+        </button>
+      </div>
+
+      <p *ngIf="isLoading" class="subtext">Loading products...</p>
+
+      <div class="product-list" *ngIf="!isLoading">
+        <article class="product-row" *ngFor="let product of products">
+          <div class="product-summary">
+            <img [src]="product.image" [alt]="product.name" width="72" height="72" loading="lazy" decoding="async">
+            <div>
+              <h3>{{ product.name }}</h3>
+              <p>{{ product.category }}<span *ngIf="product.type"> | {{ product.type }}</span></p>
+              <p class="price">{{ product.price | currency:'JMD':'symbol':'1.2-2' }}</p>
+            </div>
+          </div>
+
+          <div class="row-actions">
+            <button type="button" class="secondary-btn" (click)="editProduct(product)">
+              Edit
+            </button>
+            <button type="button" class="danger-btn" (click)="deleteProduct(product)">
+              Delete
+            </button>
+          </div>
+        </article>
+      </div>
+    </section>
+  </div>
+
+  <section class="admin-card home-content-card">
+    <div class="list-header">
+      <div>
+        <h2>Home Page Content</h2>
+        <p class="subtext">Manage the images and text shown in New Arrivals, Best Sellers, and Shop by Category.</p>
+      </div>
+    </div>
+
+    <form class="admin-form" (submit)="$event.preventDefault(); saveHomeContent()">
+      <label>
+        <span>Hero Image Path</span>
+        <input type="text" name="heroImage" [(ngModel)]="homeContent.heroImage" placeholder="assets/images/example.jpg">
+      </label>
+
+      <label>
+        <span>Upload Hero Image</span>
+        <input type="file" accept="image/png,image/jpeg,image/webp,image/gif" (change)="onHeroImageSelected($event)">
+        <small class="field-help" *ngIf="selectedHeroImageName">Selected: {{ selectedHeroImageName }}</small>
+        <small class="field-help" *ngIf="!selectedHeroImageName">Upload a file here to replace the image at the top of the home page.</small>
+      </label>
+
+      <label>
+        <span>Section</span>
+        <select name="homeSection" [(ngModel)]="selectedHomeSection">
+          <option value="newArrivals">New Arrivals</option>
+          <option value="bestSellers">Best Sellers</option>
+          <option value="categories">Shop by Category</option>
+        </select>
+      </label>
+
+      <div class="home-items-editor">
+        <article class="home-item-row" *ngFor="let item of currentHomeItems; let i = index">
+          <label>
+            <span>Name</span>
+            <input type="text" [name]="'home-name-' + selectedHomeSection + '-' + i" [(ngModel)]="item.name">
+          </label>
+
+          <label *ngIf="selectedHomeSection !== 'categories'">
+            <span>Price</span>
+            <input
+              type="number"
+              min="0"
+              step="0.01"
+              [name]="'home-price-' + selectedHomeSection + '-' + i"
+              [ngModel]="getHomeItemPrice(i)"
+              (ngModelChange)="setHomeItemPrice(i, $event)">
+          </label>
+
+          <label>
+            <span>Image Path</span>
+            <input type="text" [name]="'home-image-' + selectedHomeSection + '-' + i" [(ngModel)]="item.image" placeholder="assets/images/example.jpg">
+          </label>
+
+          <label>
+            <span>Upload Image</span>
+            <input
+              type="file"
+              accept="image/png,image/jpeg,image/webp,image/gif"
+              [name]="'home-upload-' + selectedHomeSection + '-' + i"
+              (change)="onHomeImageSelected($event, i)">
+            <small class="field-help" *ngIf="homeSelectedImageNames[getHomeItemKey(i)]">
+              Selected: {{ homeSelectedImageNames[getHomeItemKey(i)] }}
+            </small>
+            <small class="field-help" *ngIf="homeUploadingItemKey === getHomeItemKey(i)">
+              Uploading image...
+            </small>
+          </label>
+
+          <button type="button" class="danger-btn" (click)="removeHomeItem(i)">Remove</button>
+        </article>
+      </div>
+
+      <p class="error-message" *ngIf="homeErrorMessage">{{ homeErrorMessage }}</p>
+      <p class="success-message" *ngIf="homeSuccessMessage">{{ homeSuccessMessage }}</p>
+
+      <div class="form-actions">
+        <button type="button" class="secondary-btn" (click)="addHomeItem()">Add Item</button>
+        <button type="submit" class="primary-btn" [disabled]="isSavingHomeContent">
+          {{ isSavingHomeContent ? 'Saving...' : 'Save Home Content' }}
+        </button>
+        <button type="button" class="secondary-btn" (click)="resetHomeContent()">Reset Defaults</button>
+      </div>
+    </form>
+  </section>
+
+  <div class="dashboard-grid">
+    <section class="admin-card">
+      <div class="list-header">
+        <div>
+          <h2>Recent Orders</h2>
+          <p class="subtext">Latest orders placed through the website.</p>
+        </div>
+        <button type="button" class="secondary-btn" (click)="loadDashboardData()" [disabled]="isLoadingDashboard">
+          Refresh
+        </button>
+      </div>
+
+      <p *ngIf="isLoadingDashboard" class="subtext">Loading dashboard activity...</p>
+
+      <div class="data-list" *ngIf="!isLoadingDashboard">
+        <article class="data-row" *ngFor="let order of recentOrders">
+          <div>
+            <h3>{{ order.order_number }}</h3>
+            <p>{{ order.full_name }} | {{ order.phone }}</p>
+            <p *ngIf="order.email">{{ order.email }}</p>
+          </div>
+          <div class="data-meta">
+            <strong>{{ order.total | currency:'JMD':'symbol':'1.2-2' }}</strong>
+            <span>{{ order.payment_method }} / {{ order.payment_status }}</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="admin-card">
+      <h2>Customers</h2>
+      <p class="subtext">People who have placed orders on the website.</p>
+
+      <div class="data-list">
+        <article class="data-row" *ngFor="let customer of customers">
+          <div>
+            <h3>{{ customer.full_name }}</h3>
+            <p>{{ customer.phone }}</p>
+            <p *ngIf="customer.email">{{ customer.email }}</p>
+          </div>
+          <div class="data-meta">
+            <strong>{{ customer.orders_count }} orders</strong>
+            <span>{{ customer.total_spent | currency:'JMD':'symbol':'1.2-2' }}</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="admin-card">
+      <h2>Users</h2>
+      <p class="subtext">Accounts currently saved in your database.</p>
+
+      <div class="data-list">
+        <article class="data-row" *ngFor="let user of users">
+          <div>
+            <h3>{{ user.name || 'Unnamed User' }}</h3>
+            <p>{{ user.email }}</p>
+          </div>
+          <div class="data-meta">
+            <strong>{{ user.role }}</strong>
+          </div>
+        </article>
+      </div>
+    </section>
+  </div>
+</section>

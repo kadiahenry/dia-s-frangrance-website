@@ -1,0 +1,72 @@
+<section class="success-page" *ngIf="order">
+
+  <!-- ✅ Confetti (pure CSS) -->
+  <div class="confetti" aria-hidden="true">
+    <span *ngFor="let x of [1,2,3,4,5,6,7,8,9,10,11,12]"></span>
+  </div>
+
+  <div class="success-card">
+
+    <div class="check-wrap" aria-hidden="true">
+      <div class="check-circle">✓</div>
+    </div>
+
+    <h1>Order Confirmed!</h1>
+
+    <!-- ✅ Order number -->
+    <p class="order-number">
+      Order #: <strong>{{ orderNumber }}</strong>
+    </p>
+
+    <p class="sub">
+      Thank you, <strong>{{ order.fullName }}</strong>.
+      Your order has been placed successfully.
+    </p>
+
+    <!-- ✅ Delivery message -->
+    <div class="delivery-box">
+      <h3>Delivery Details</h3>
+      <p>{{ deliveryMessage }}</p>
+    </div>
+
+    <!-- ✅ Summary -->
+    <div class="mini-summary">
+
+      <div class="row">
+        <span>Subtotal</span>
+        <span>{{ order.subtotal | currency:'JMD':'symbol':'1.2-2' }}</span>
+      </div>
+
+      <div class="row">
+        <span>Included Tax (15%)</span>
+        <span>{{ (order.taxIncluded || 0) | currency:'JMD':'symbol':'1.2-2' }}</span>
+      </div>
+
+      <div class="row">
+        <span>Delivery</span>
+        <span>{{ order.deliveryFee | currency:'JMD':'symbol':'1.2-2' }}</span>
+      </div>
+
+      <div class="row total">
+        <span>Total</span>
+        <span>{{ order.total | currency:'JMD':'symbol':'1.2-2' }}</span>
+      </div>
+
+    </div>
+
+    <div class="delivery-box" *ngIf="order.paymentMethod">
+      <h3>Payment</h3>
+      <p>
+        Method: {{ order.paymentMethod === 'paypal' ? 'PayPal' : 'Pay on Delivery' }}
+        <span *ngIf="order.paymentStatus"> | Status: {{ order.paymentStatus }}</span>
+      </p>
+      <p *ngIf="order.paymentId">Reference: {{ order.paymentId }}</p>
+    </div>
+
+    <button class="primary-btn" type="button" (click)="goToProducts()">
+      Continue Shopping
+    </button>
+
+  </div>
+
+</section>

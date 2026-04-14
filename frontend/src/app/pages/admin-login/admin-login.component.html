@@ -1,0 +1,48 @@
+<app-banner
+  title="Admin Login"
+  subtitle="Authorized access only."
+  background="teal"
+  [hideBreadcrumbs]="true">
+</app-banner>
+
+<section class="admin-login-page">
+  <div class="admin-login-card">
+    <h2>Administrator Access</h2>
+    <p class="subtext">Login to manage products, orders, and site content.</p>
+
+    <p class="admin-login-note">
+      Your administrator account should be configured with backend environment variables.
+    </p>
+
+    <form [formGroup]="loginForm" (ngSubmit)="login()" novalidate>
+
+      <div class="form-group">
+        <label for="email">Admin Email</label>
+        <input
+          type="email"
+          id="email"
+          formControlName="email"
+          placeholder="admin@example.com"
+          autocomplete="username"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          formControlName="password"
+          placeholder="Enter password"
+          autocomplete="current-password"
+        />
+      </div>
+
+      <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+      <button type="submit" class="admin-login-btn" [disabled]="isSubmitting">
+        {{ isSubmitting ? 'Signing In...' : 'Login as Admin' }}
+      </button>
+    </form>
+  </div>
+</section>

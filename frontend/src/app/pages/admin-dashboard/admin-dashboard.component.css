@@ -1,0 +1,271 @@
+.admin-dashboard {
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.admin-overview {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stats-card {
+  background: linear-gradient(135deg, #21635a, #2f7d72);
+  color: #fff;
+  padding: 18px 20px;
+  border-radius: 16px;
+  box-shadow: 0 10px 24px rgba(33, 99, 90, 0.18);
+}
+
+.stats-card strong {
+  display: block;
+  font-size: 1.8rem;
+  margin-top: 8px;
+}
+
+.stats-label {
+  opacity: 0.85;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.78rem;
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: minmax(320px, 420px) 1fr;
+  gap: 24px;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.admin-card {
+  background: #fff;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.admin-card h2 {
+  margin-top: 0;
+  color: #21635a;
+}
+
+.subtext {
+  color: #666;
+  margin-top: 0;
+}
+
+.admin-form {
+  display: grid;
+  gap: 14px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.admin-form label span {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.admin-form input,
+.admin-form select,
+.admin-form textarea {
+  width: 100%;
+  border: 1px solid #d9d9d9;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font: inherit;
+  box-sizing: border-box;
+}
+
+.field-help {
+  display: block;
+  margin-top: 6px;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 16px;
+}
+
+.product-list {
+  display: grid;
+  gap: 14px;
+}
+
+.home-content-card {
+  margin-top: 24px;
+}
+
+.home-items-editor {
+  display: grid;
+  gap: 14px;
+}
+
+.home-item-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
+  gap: 12px;
+  align-items: end;
+  border: 1px solid #e7e7e7;
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.home-upload-block {
+  border-top: 1px solid #ececec;
+  padding-top: 8px;
+}
+
+.data-list {
+  display: grid;
+  gap: 14px;
+}
+
+.data-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  border: 1px solid #e7e7e7;
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.data-row h3 {
+  margin: 0 0 4px;
+}
+
+.data-row p {
+  margin: 0;
+  color: #666;
+}
+
+.data-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 4px;
+  text-align: right;
+}
+
+.product-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  border: 1px solid #e7e7e7;
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.row-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.product-summary {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.product-summary img {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 12px;
+  background: #f0f0f0;
+}
+
+.product-summary h3 {
+  margin: 0 0 4px;
+}
+
+.product-summary p {
+  margin: 0;
+  color: #666;
+}
+
+.price {
+  color: #21635a;
+  font-weight: 700;
+}
+
+.primary-btn,
+.secondary-btn,
+.danger-btn {
+  border: none;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.primary-btn,
+.secondary-btn {
+  background: #21635a;
+  color: #fff;
+}
+
+.primary-btn:hover,
+.secondary-btn:hover {
+  background: #1b5048;
+}
+
+.danger-btn {
+  background: #b91c1c;
+  color: #fff;
+}
+
+.danger-btn:hover {
+  background: #991b1b;
+}
+
+.error-message {
+  color: #b91c1c;
+  margin: 0;
+}
+
+.success-message {
+  color: #166534;
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .admin-overview,
+  .dashboard-grid,
+  .admin-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .product-row,
+  .data-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .data-meta {
+    align-items: flex-start;
+    text-align: left;
+  }
+ 
+  .home-item-row {
+    grid-template-columns: 1fr;
+  }
+}

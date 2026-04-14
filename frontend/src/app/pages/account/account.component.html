@@ -1,0 +1,366 @@
+<app-banner
+  title="My Account"
+  subtitle="Manage your details, orders, and saved shopping experience."
+  background="default"
+  [hideBreadcrumbs]="false">
+</app-banner>
+
+<section class="account-page">
+  <div class="account-shell" *ngIf="!isLoading; else loadingState">
+    <aside class="account-sidebar">
+      <h2>My Account</h2>
+      <nav class="account-nav">
+        <ng-container *ngFor="let link of accountLinks">
+          <a *ngIf="link.route" [routerLink]="link.route" [fragment]="link.fragment">
+            {{ link.label }}
+          </a>
+          <button
+            *ngIf="!link.route && link.anchor"
+            type="button"
+            class="account-nav-button"
+            [class.active]="isActiveLink(link)"
+            (click)="openAnchor(link.anchor)">
+            {{ link.label }}
+          </button>
+        </ng-container>
+      </nav>
+    </aside>
+
+    <div class="account-main">
+      <header class="account-header" [class.compact]="activeSection !== 'overview'">
+        <div *ngIf="activeSection === 'overview'">
+          <h1>Welcome, {{ user?.name || displayName }}</h1>
+          <p>Your customer dashboard for orders, profile updates, and saved favorites.</p>
+        </div>
+        <button type="button" class="signout-btn" (click)="signOut()">Sign Out</button>
+      </header>
+
+      <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
+      <p class="success-message" *ngIf="successMessage">{{ successMessage }}</p>
+
+      <section class="profile-section" *ngIf="activeSection === 'overview'">
+        <div class="section-header">
+          <div>
+            <h2>My Account</h2>
+            <p>Choose a section from the left to view its details here.</p>
+          </div>
+        </div>
+
+        <div class="account-grid">
+          <button type="button" class="account-card" *ngFor="let link of accountLinks" (click)="openLink(link)">
+            <div class="card-icon" [ngClass]="'card-icon--' + link.icon">
+              <span class="card-icon-art"></span>
+            </div>
+            <div>
+              <h3>{{ link.label }}</h3>
+              <p>{{ link.description }}</p>
+            </div>
+          </button>
+        </div>
+
+        <div class="nested-section">
+          <div class="section-header">
+            <div>
+              <h2>Recent Orders</h2>
+              <p>Your latest purchases tied to this account.</p>
+            </div>
+            <button type="button" class="card-link" (click)="goTo('/orders')">View All Orders</button>
+          </div>
+
+          <div class="recent-orders" *ngIf="recentOrders.length; else noOrders">
+            <article class="recent-order" *ngFor="let order of recentOrders">
+              <div>
+                <h3>{{ order.order_number }}</h3>
+                <p>{{ order.created_at | date:'mediumDate' }}</p>
+              </div>
+              <strong>{{ order.total | currency:'JMD':'symbol':'1.2-2' }}</strong>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="profile-section" *ngIf="activeSection === 'my-info'">
+        <div class="section-header section-header-lined">
+          <div>
+            <h2>My Info</h2>
+            <p>Your saved customer details appear here. Edit only what you want to change.</p>
+          </div>
+        </div>
+
+        <div class="info-shell">
+          <article class="saved-card info-summary-card">
+            <div class="summary-card-header">
+              <div>
+                <h3>Customer Information</h3>
+                <p>Your saved customer details.</p>
+              </div>
+              <button type="button" class="save-btn summary-edit-btn" (click)="openContactEditor()" *ngIf="!showEditContactForm">Edit</button>
+            </div>
+
+            <p *ngFor="let item of contactDetailLines">{{ item }}</p>
+            <p class="empty-copy" *ngIf="!contactDetailLines.length">No customer details saved yet.</p>
+          </article>
+
+          <form class="profile-form compact-form" *ngIf="showEditContactForm" (ngSubmit)="saveProfile()">
+            <div class="info-block">
+              <h3>Edit Customer Information</h3>
+
+              <label>
+                <span>Full Name</span>
+                <input type="text" name="name" [(ngModel)]="profileForm.name" required>
+              </label>
+
+              <label>
+                <span>Email Address</span>
+                <input type="email" [value]="user?.email || ''" disabled>
+              </label>
+
+              <label>
+                <span>Phone Number</span>
+                <input type="text" name="phone" [(ngModel)]="profileForm.phone">
+              </label>
+
+              <label>
+                <span>Country</span>
+                <input type="text" name="country" [(ngModel)]="profileForm.country">
+              </label>
+            </div>
+
+            <div class="inline-actions">
+              <button type="submit" class="save-btn">Save Changes</button>
+              <button type="button" class="text-action" (click)="closeContactEditor()">Cancel</button>
+            </div>
+          </form>
+
+          <article class="saved-card info-summary-card">
+            <div class="summary-card-header">
+              <div>
+                <h3>Saved Address</h3>
+                <p>Your default delivery address.</p>
+              </div>
+              <button type="button" class="save-btn summary-edit-btn" (click)="openAddressEditor()" *ngIf="!showEditAddressForm">Edit</button>
+            </div>
+
+            <p *ngFor="let line of formattedAddressLines">{{ line }}</p>
+            <p class="empty-copy" *ngIf="!hasSavedAddress">You have not saved an address yet.</p>
+          </article>
+
+          <form class="profile-form compact-form" *ngIf="showEditAddressForm" (ngSubmit)="saveProfile()">
+            <div class="info-block">
+              <h3>Edit Address</h3>
+
+              <label>
+                <span>Address Line 1</span>
+                <input type="text" name="addressLine1" [(ngModel)]="profileForm.addressLine1">
+              </label>
+
+              <label>
+                <span>Address Line 2</span>
+                <input type="text" name="addressLine2" [(ngModel)]="profileForm.addressLine2">
+              </label>
+
+              <label>
+                <span>City / Town</span>
+                <input type="text" name="city" [(ngModel)]="profileForm.city">
+              </label>
+
+              <label>
+                <span>Parish</span>
+                <input type="text" name="parish" [(ngModel)]="profileForm.parish">
+              </label>
+
+              <label>
+                <span>Postal Code</span>
+                <input type="text" name="postalCode" [(ngModel)]="profileForm.postalCode">
+              </label>
+            </div>
+
+            <div class="inline-actions">
+              <button type="submit" class="save-btn">Save Address</button>
+              <button type="button" class="text-action" (click)="closeAddressEditor()">Cancel</button>
+            </div>
+          </form>
+
+          <article class="saved-card info-summary-card">
+            <div class="summary-card-header">
+              <div>
+                <h3>Password</h3>
+                <p>Change your password when needed.</p>
+              </div>
+              <button type="button" class="save-btn summary-edit-btn" (click)="openPasswordEditor()" *ngIf="!showEditPasswordForm">Edit</button>
+            </div>
+            <p>Password is hidden for your security.</p>
+          </article>
+
+          <form class="profile-form compact-form" *ngIf="showEditPasswordForm" (ngSubmit)="saveProfile()">
+            <div class="info-block info-block--password">
+              <h3>Change Password</h3>
+
+              <label>
+                <span>Current Password</span>
+                <input type="password" name="currentPassword" [(ngModel)]="profileForm.currentPassword">
+              </label>
+
+              <label>
+                <span>New Password</span>
+                <input type="password" name="newPassword" [(ngModel)]="profileForm.newPassword">
+              </label>
+            </div>
+
+            <div class="inline-actions">
+              <button type="submit" class="save-btn">Update Password</button>
+              <button type="button" class="text-action" (click)="closePasswordEditor()">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section class="profile-section" *ngIf="activeSection === 'payment-methods'">
+        <div class="section-header section-header-lined address-header">
+          <div>
+            <h2>My Payment Methods</h2>
+            <p>Save cards you want to use faster at checkout.</p>
+          </div>
+        </div>
+
+        <div class="saved-grid" *ngIf="hasSavedPaymentCards; else noSavedCards">
+          <article class="saved-card payment-card-box" *ngFor="let card of savedPaymentCards">
+            <div class="payment-card-top">
+              <h3>{{ card.brand }} ending in {{ card.lastFour }}</h3>
+              <span class="default-badge" *ngIf="card.isDefault">Default</span>
+            </div>
+            <p>{{ card.cardholderName }}</p>
+            <p>Expires {{ card.expiryMonth }}/{{ card.expiryYear }}</p>
+            <div class="saved-actions separated-actions">
+              <button type="button" class="text-action" (click)="makeDefaultCard(card.id)" [disabled]="card.isDefault">
+                Make Default
+              </button>
+              <button type="button" class="text-action" (click)="deletePaymentCard(card.id)">Delete</button>
+            </div>
+          </article>
+        </div>
+
+        <form class="payment-form" *ngIf="showAddCardForm" (ngSubmit)="savePaymentCard()">
+          <div class="payment-form-grid">
+            <label>
+              <span>Name on Card</span>
+              <input type="text" name="paymentCardholderName" [(ngModel)]="paymentCardForm.cardholderName" required>
+            </label>
+
+            <label class="full-span">
+              <span>Card Number</span>
+              <input
+                type="text"
+                name="paymentCardNumber"
+                [(ngModel)]="paymentCardForm.cardNumber"
+                (input)="formatPaymentCardNumber()"
+                inputmode="numeric"
+                maxlength="23"
+                placeholder="1234 5678 9012 3456"
+                required>
+            </label>
+
+            <label>
+              <span>Expiry Month</span>
+              <input
+                type="text"
+                name="paymentExpiryMonth"
+                [(ngModel)]="paymentCardForm.expiryMonth"
+                inputmode="numeric"
+                maxlength="2"
+                placeholder="MM"
+                required>
+            </label>
+
+            <label>
+              <span>Expiry Year</span>
+              <input
+                type="text"
+                name="paymentExpiryYear"
+                [(ngModel)]="paymentCardForm.expiryYear"
+                inputmode="numeric"
+                maxlength="2"
+                placeholder="YY"
+                required>
+            </label>
+
+            <label>
+              <span>Security Code</span>
+              <input
+                type="password"
+                name="paymentCvv"
+                [(ngModel)]="paymentCardForm.cvv"
+                inputmode="numeric"
+                maxlength="4"
+                placeholder="CVV"
+                required>
+            </label>
+          </div>
+
+          <label class="payment-consent">
+            <input type="checkbox" name="paymentCardConsent" [(ngModel)]="paymentCardConsent">
+            <span>
+              I consent to Dia's Fragrances and More storing these card details on this device for faster checkout, in line with the
+              <a routerLink="/privacy">Privacy Policy</a>.
+            </span>
+          </label>
+
+          <div class="payment-form-actions">
+            <button type="submit" class="save-btn dark-save-btn">Save Card</button>
+            <button type="button" class="text-action cancel-action" (click)="cancelAddCard()">Cancel</button>
+          </div>
+        </form>
+
+        <div class="payment-footer">
+          <button type="button" class="save-btn dark-save-btn add-action-btn" (click)="openAddCardForm()" *ngIf="!showAddCardForm">
+            Add New Card
+          </button>
+        </div>
+      </section>
+
+      <section class="profile-section" *ngIf="activeSection === 'addresses'">
+        <div class="section-header section-header-lined address-header">
+          <div>
+            <h2>My Addresses</h2>
+          </div>
+        </div>
+
+        <h3 class="subsection-title">Default Address</h3>
+
+        <div class="address-card address-card-large" *ngIf="hasSavedAddress; else noAddress">
+          <p><strong>{{ user?.name || profileForm.name || 'Your Name' }}</strong></p>
+          <p *ngFor="let line of formattedAddressLines">{{ line }}</p>
+          <div class="saved-actions">
+            <button type="button" class="text-action" (click)="openAddressEditor(); openSection('my-info')">Edit</button>
+          </div>
+        </div>
+
+        <div class="address-footer">
+          <button type="button" class="save-btn dark-save-btn add-action-btn" (click)="openAddressEditor(); openSection('my-info')">
+            Add New Address
+          </button>
+        </div>
+      </section>
+    </div>
+  </div>
+</section>
+
+<ng-template #loadingState>
+  <section class="account-page">
+    <div class="account-shell">
+      <p>Loading your account...</p>
+    </div>
+  </section>
+</ng-template>
+
+<ng-template #noOrders>
+  <p class="empty-copy">No recent orders yet.</p>
+</ng-template>
+
+<ng-template #noAddress>
+  <p class="empty-copy">You have not saved an address as yet.</p>
+</ng-template>
+
+<ng-template #noSavedCards>
+  <p class="empty-copy">You have not saved a card as yet.</p>
+</ng-template>

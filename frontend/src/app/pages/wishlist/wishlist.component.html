@@ -1,0 +1,67 @@
+<app-banner
+  title="My Account"
+  subtitle="Manage your saved favorites and come back to them anytime."
+  background="default"
+  [hideBreadcrumbs]="false">
+</app-banner>
+
+<section class="wishlist-page">
+  <div class="account-shell">
+    <aside class="account-sidebar">
+      <h2>My Account</h2>
+      <nav class="account-nav">
+        <a *ngFor="let link of accountLinks"
+           [routerLink]="link.route"
+           [fragment]="link.fragment || undefined">
+          {{ link.label }}
+        </a>
+      </nav>
+    </aside>
+
+    <div class="account-main">
+      <header class="account-header">
+        <div>
+          <h1>Welcome, {{ displayName }}</h1>
+          <p>Save favorites here and come back when you're ready to shop.</p>
+        </div>
+        <button type="button" class="signout-btn" (click)="signOut()">Sign Out</button>
+      </header>
+
+      <section class="content-card">
+        <div class="wishlist-banner">
+          <div>
+            <h2>My Love-It List</h2>
+            <p>Saved items you can come back to anytime.</p>
+          </div>
+
+          <button class="clear-btn" *ngIf="wishlist.length > 0" (click)="clearAll()">
+            Clear All
+          </button>
+        </div>
+
+        <div *ngIf="wishlist.length === 0" class="empty">
+          <h3>Your Love-It List is empty</h3>
+          <p>Browse products and tap the heart to save your favorites.</p>
+          <a routerLink="/products" class="primary-btn">Browse Products</a>
+        </div>
+
+        <div *ngIf="wishlist.length > 0" class="wishlist-grid">
+          <div class="wishlist-card" *ngFor="let item of wishlist">
+            <button type="button" class="wishlist-link" (click)="viewProduct(item)" [attr.aria-label]="'View ' + item.name">
+              <img [src]="item.image" [alt]="item.name" width="220" height="220" loading="lazy" decoding="async">
+
+              <div class="info">
+                <h3>{{ item.name }}</h3>
+                <p class="price">{{ item.price | currency:'JMD':'symbol':'1.2-2' }}</p>
+              </div>
+            </button>
+
+            <button class="remove-btn" type="button" (click)="remove(item.id)">
+              Remove
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,170 @@
+.success-page {
+  min-height: 75vh;
+  display: grid;
+  place-items: center;
+  padding: 30px 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.success-card {
+  width: min(600px, 100%);
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.10);
+  padding: 28px 22px;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  animation: popIn 420ms ease-out;
+}
+
+.check-wrap {
+  display: grid;
+  place-items: center;
+  margin-bottom: 12px;
+}
+
+.check-circle {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-strong));
+  color: white;
+  font-size: 38px;
+  font-weight: 900;
+  display: grid;
+  place-items: center;
+  animation: pulse 900ms ease-out 1;
+}
+
+h1 {
+  margin: 8px 0 6px;
+  font-size: 2rem;
+}
+
+.order-number {
+  margin: 0 0 10px;
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+.sub {
+  margin: 0 0 16px;
+  opacity: 0.9;
+  line-height: 1.5;
+}
+
+/* Delivery box */
+.delivery-box {
+  text-align: left;
+  margin: 10px 0 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  padding: 14px;
+  border-radius: 14px;
+}
+
+.delivery-box h3 {
+  margin: 0 0 6px;
+  font-size: 1.05rem;
+}
+
+.delivery-box p {
+  margin: 0;
+  opacity: 0.95;
+  line-height: 1.5;
+}
+
+/* Summary */
+.mini-summary {
+  text-align: left;
+  margin: 10px auto 18px;
+  border-top: 1px solid #eee;
+  padding-top: 12px;
+}
+
+.mini-summary .row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+}
+
+.mini-summary .row.total {
+  font-weight: 900;
+  font-size: 1.05rem;
+}
+
+/* Button */
+.primary-btn {
+  width: 100%;
+  border: none;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-strong));
+  color: #fff;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.primary-btn:hover {
+  background: linear-gradient(135deg, var(--color-primary-strong), #c95565);
+  transform: translateY(-1px);
+}
+
+/* Confetti animation */
+.confetti {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.confetti span {
+  position: absolute;
+  top: -10px;
+  width: 10px;
+  height: 16px;
+  border-radius: 3px;
+  opacity: 0.9;
+  animation: confettiFall 1.8s ease-in-out forwards;
+}
+
+/* Random placement + random colors (kept within your theme) */
+.confetti span:nth-child(1) { left: 5%;  background: var(--color-primary); animation-delay: 0s; }
+.confetti span:nth-child(2) { left: 12%; background: var(--color-primary-strong); animation-delay: 0.1s; }
+.confetti span:nth-child(3) { left: 20%; background: var(--color-warm-neutral); animation-delay: 0.15s; }
+.confetti span:nth-child(4) { left: 28%; background: var(--color-primary); animation-delay: 0.2s; }
+.confetti span:nth-child(5) { left: 36%; background: var(--color-primary-strong); animation-delay: 0.25s; }
+.confetti span:nth-child(6) { left: 44%; background: var(--color-warm-neutral); animation-delay: 0.3s; }
+.confetti span:nth-child(7) { left: 52%; background: var(--color-primary); animation-delay: 0.35s; }
+.confetti span:nth-child(8) { left: 60%; background: var(--color-primary-strong); animation-delay: 0.4s; }
+.confetti span:nth-child(9) { left: 68%; background: var(--color-warm-neutral); animation-delay: 0.45s; }
+.confetti span:nth-child(10){ left: 76%; background: var(--color-primary); animation-delay: 0.5s; }
+.confetti span:nth-child(11){ left: 84%; background: var(--color-primary-strong); animation-delay: 0.55s; }
+.confetti span:nth-child(12){ left: 92%; background: var(--color-warm-neutral); animation-delay: 0.6s; }
+
+@keyframes confettiFall {
+  0%   { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(110vh) rotate(480deg); }
+}
+
+@keyframes popIn {
+  from { transform: translateY(10px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes pulse {
+  0%   { transform: scale(0.85); opacity: 0.7; }
+  60%  { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+  h1 {
+    font-size: 1.6rem;
+  }
+}
+

@@ -1,0 +1,85 @@
+<app-banner
+  [title]="product?.name || 'Product Details'"
+  subtitle="Discover fragrance notes, ingredients, and details."
+  background="default"
+  [hideBreadcrumbs]="false">
+</app-banner>
+
+<section class="product-page" *ngIf="product; else notFound">
+
+  <div class="product-container">
+
+    <!-- Left: Image -->
+    <div class="product-image">
+      <img [src]="product.image" [alt]="product.name" width="520" height="520" loading="lazy" decoding="async" />
+    </div>
+
+    <!-- Right: Details -->
+    <div class="product-details">
+
+      <h1>{{ product.name }}</h1>
+
+      <p class="category">
+        <strong>Category:</strong> {{ product.category }}
+      </p>
+
+      <p class="type" *ngIf="product.type">
+        {{ product.type }}
+      </p>
+
+      <p class="price">{{ product.price | currency:'JMD':'symbol':'1.2-2' }}</p>
+
+      <p class="description" *ngIf="product.description">
+        {{ product.description }}
+      </p>
+
+      <!-- ✅ Fragrance Notes -->
+      <div class="notes" *ngIf="product.notes?.length">
+        <h3>Fragrance Notes</h3>
+
+        <ul class="notes-list">
+          <li *ngFor="let note of product.notes">
+            {{ note }}
+          </li>
+        </ul>
+      </div>
+
+      <!-- Quantity controls -->
+      <div class="quantity-controls">
+        <button type="button" (click)="decrease()">−</button>
+        <span>{{ quantity }}</span>
+        <button type="button" (click)="increase()">+</button>
+      </div>
+
+      <!-- Buttons -->
+      <div class="actions">
+        <button type="button" class="add-btn" (click)="addToCart()">
+          Add to Cart
+        </button>
+
+        <button
+         type="button"
+         class="wishlist-btn"
+         (click)="$event.stopPropagation(); addToWishlist(product)"
+         [class.active]="isInWishlist()"
+          aria-label="Add to wishlist">
+         ♥
+        </button>
+      </div>
+
+      <a routerLink="/products" class="back-link">← Back to Products</a>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- If product not found -->
+<ng-template #notFound>
+  <div class="not-found">
+    <h2>Product not found</h2>
+    <a routerLink="/products">Go back</a>
+  </div>
+</ng-template>
+

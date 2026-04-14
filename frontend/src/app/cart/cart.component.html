@@ -1,0 +1,105 @@
+<section class="cart-container">
+  <h2>Your Cart</h2>
+
+  <p *ngIf="cartItems.length === 0" class="empty-cart">
+    Your cart is empty.
+  </p>
+
+  <ng-container *ngIf="cartItems.length > 0">
+    <div class="cart-layout">
+      <section class="cart-main">
+        <div class="cart-status-row">
+          <div class="status-pill active">
+            <span class="status-icon">Shipping</span>
+            <span>{{ cartItems.length }} Item added for Shipping</span>
+          </div>
+        </div>
+
+        <div class="cart-table-header">
+          <span>Item</span>
+          <span>Price</span>
+          <span>Qty</span>
+          <span>Total Price</span>
+        </div>
+
+        <div class="cart-lines">
+          <article class="cart-line" *ngFor="let item of cartItems">
+            <div class="line-item">
+              <img [src]="item.image" [alt]="item.name" width="96" height="96" loading="lazy" decoding="async">
+
+              <div class="line-copy">
+                <h3>{{ item.name }}</h3>
+                <p *ngIf="item.type">{{ item.type }}</p>
+                <p class="line-meta">Shipping</p>
+              </div>
+            </div>
+
+            <div class="line-price">{{ item.price | currency:'JMD':'symbol':'1.2-2' }}</div>
+
+            <div class="line-qty">
+              <div class="quantity-controls">
+                <button type="button" (click)="decrease(item.id)">-</button>
+                <span>{{ item.quantity }}</span>
+                <button type="button" (click)="increase(item.id)">+</button>
+              </div>
+            </div>
+
+            <div class="line-total-wrap">
+              <div class="line-total">{{ item.price * item.quantity | currency:'JMD':'symbol':'1.2-2' }}</div>
+              <button type="button" class="remove-btn" (click)="removeItem(item.id)" aria-label="Remove item">
+                ×
+              </button>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <aside class="cart-side">
+        <div class="summary-card">
+          <div class="summary-row">
+            <span>Merchandise Subtotal</span>
+            <strong>{{ getTotal() | currency:'JMD':'symbol':'1.2-2' }}</strong>
+          </div>
+
+          <div class="summary-row">
+            <span>Estimated Shipping - Standard</span>
+            <strong>{{ getEstimatedShipping() | currency:'JMD':'symbol':'1.2-2' }}</strong>
+          </div>
+
+          <div class="summary-row summary-tax">
+            <span>Sales tax</span>
+            <strong>{{ getTaxIncluded() | currency:'JMD':'symbol':'1.2-2' }}</strong>
+          </div>
+
+          <p class="summary-note">Tax is included in your listed product prices and finalized at checkout.</p>
+
+          <div class="summary-row grand-total">
+            <span>Order total (JMD)</span>
+            <strong>{{ getOrderTotal() | currency:'JMD':'symbol':'1.2-2' }}</strong>
+          </div>
+
+          <button type="button" class="checkout-btn primary" (click)="proceedToCheckout()">
+            <span class="lock-icon">🔒</span>
+            <span>Checkout</span>
+          </button>
+
+          <button type="button" class="checkout-btn paypal" (click)="proceedToCheckout('paypal')">
+            <span class="paypal-word">PayPal</span>
+          </button>
+
+          <div class="payment-strip">
+            <span class="pay-label">Accepted payment methods</span>
+            <div class="payment-icons">
+              <span class="payment-pill paypal-pill">PayPal</span>
+              <span class="payment-pill cod-pill">COD</span>
+              <span class="payment-pill">VISA</span>
+              <span class="payment-pill">MC</span>
+              <span class="payment-pill">AMEX</span>
+              <span class="payment-pill">DISC</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </ng-container>
+</section>

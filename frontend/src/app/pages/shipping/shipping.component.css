@@ -1,0 +1,208 @@
+/* Banner you requested */
+.info-page {
+  background: linear-gradient(135deg, #efc9c7 0%, #eab7b4 100%);
+  color: #fff;
+  padding: 28px 20px;
+  border-radius: 5px;
+}
+
+.info-page h1 {
+  margin: 0 0 8px;
+  font-size: 2rem;
+}
+
+.info-page p {
+  margin: 0;
+  opacity: 0.95;
+  line-height: 1.5;
+}
+
+/* Page wrapper */
+.shipping-page {
+  background: var(--color-background-soft);
+  padding: 20px 16px 60px;
+  color: #222;
+}
+
+/* Callout (like privacy) */
+.top-callout {
+  max-width: 1100px;
+  margin: 0 auto 14px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+
+  padding: 16px 18px;
+  border-radius: 14px;
+
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-left: 6px solid var(--color-primary);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.06);
+}
+
+.callout-icon {
+  font-size: 1.35rem;
+  line-height: 1;
+  padding-top: 4px;
+}
+
+.callout-text h2 {
+  margin: 0 0 6px;
+  font-size: 1.2rem;
+  color: var(--color-primary-strong);
+}
+
+.callout-text p {
+  margin: 0 0 8px;
+  color: var(--color-text);
+  line-height: 1.5;
+}
+
+/* Prevent anchor headings hiding behind sticky header */
+.anchor {
+  scroll-margin-top: 90px;
+}
+
+.shipping-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  gap: 14px;
+}
+
+/* Section cards */
+.section-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 18px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.05);
+}
+
+/* Title row with icon */
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.section-icon {
+  font-size: 1.25rem;
+}
+
+.section-card h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #111;
+}
+
+.section-card h3 {
+  margin: 10px 0 6px;
+  font-size: 1.05rem;
+  color: var(--color-primary-strong);
+}
+
+.section-card p {
+  margin: 0 0 10px;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+.section-card ul {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  color: var(--color-text);
+}
+
+.section-card li {
+  margin: 6px 0;
+  line-height: 1.5;
+}
+
+/* COD cards */
+.cod-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.cod-card {
+  border-radius: 14px;
+  padding: 14px;
+  background: var(--color-surface);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.cod-card .price {
+  margin: 6px 0;
+  font-weight: 800;
+  color: var(--color-primary-strong);
+  font-size: 1.1rem;
+}
+
+/* Note box (yellow) */
+.note-box {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+/* Contact box */
+.contact-box {
+  margin-top: 10px;
+  padding: 14px;
+  border-radius: 12px;
+  background: var(--color-surface);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.contact-box p {
+  margin: 6px 0;
+}
+
+/* Links */
+a {
+  color: var(--color-primary-strong);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: var(--color-contrast-soft);
+}
+
+.muted {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .cod-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .top-callout {
+    flex-direction: column;
+  }
+
+  .section-card,
+  .toc {
+    padding: 14px;
+  }
+
+  .info-page h1 {
+    font-size: 1.6rem;
+  }
+}
+
+

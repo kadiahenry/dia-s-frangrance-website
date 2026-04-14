@@ -1,0 +1,135 @@
+.about-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 26px 16px 60px;
+}
+
+/* Top callout */
+.top-callout {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  border-left: 6px solid var(--color-primary);
+  margin-bottom: 22px;
+}
+
+.callout-icon {
+  font-size: 26px;
+  line-height: 1;
+}
+
+.callout-text h2 {
+  margin: 0 0 8px;
+  font-size: 1.25rem;
+  color: var(--color-primary-strong);
+}
+
+.callout-text p {
+  margin: 0 0 8px;
+  line-height: 1.55;
+  color: var(--color-text);
+}
+
+.last-updated {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--color-text);
+  opacity: 1;
+}
+
+/* Cards */
+.about-content {
+  display: grid;
+  gap: 18px;
+}
+
+.section-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.section-icon {
+  font-size: 20px;
+}
+
+.section-card h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  color: var(--color-primary-strong);
+}
+
+.section-card p {
+  margin: 0 0 10px;
+  line-height: 1.55;
+  color: #333;
+}
+
+/* Lists */
+.list {
+  margin: 0;
+  padding-left: 18px;
+  color: #333;
+  line-height: 1.6;
+}
+
+.best-sellers li {
+  font-weight: 600;
+}
+
+/* Table */
+.table-wrap {
+  overflow-x: auto;
+}
+
+.info-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 520px;
+}
+
+.info-table th,
+.info-table td {
+  text-align: left;
+  padding: 12px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.info-table th {
+  color: var(--color-primary-strong);
+  font-weight: 700;
+  background: var(--color-surface);
+}
+
+.info-table a {
+  color: var(--color-primary-strong);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.info-table a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+  .top-callout {
+    flex-direction: column;
+  }
+
+  .about-page {
+    padding-top: 18px;
+  }
+}

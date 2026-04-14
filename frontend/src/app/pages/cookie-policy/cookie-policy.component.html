@@ -1,0 +1,124 @@
+<app-banner
+  title="Cookie Policy"
+  subtitle="Learn what cookies we use, why we use them, and how to manage your choices."
+  background="default">
+</app-banner>
+
+<section class="cookie-policy-page">
+  <div class="top-callout" role="note" aria-label="Cookie policy introduction">
+    <div class="callout-icon" aria-hidden="true">CC</div>
+
+    <div class="callout-text">
+      <h1>Your Cookie Choices</h1>
+      <p>
+        This Cookie Policy explains what cookies are, how we use them on Dia's Fragrances and More,
+        and how you can control non-essential cookie preferences.
+      </p>
+      <p class="last-updated">
+        <strong>Last updated:</strong> March 31, 2026
+      </p>
+      <button type="button" class="manage-cookies-btn" (click)="openCookieSettings()">
+        Open Cookie Banner
+      </button>
+      <div class="cookie-choice-actions" aria-label="Cookie preference actions">
+        <button type="button" class="choice-btn primary" (click)="acceptCookies()">Accept Optional Cookies</button>
+        <button type="button" class="choice-btn secondary" (click)="rejectCookies()">Reject Optional Cookies</button>
+        <button type="button" class="choice-btn tertiary" (click)="resetCookies()">Reset Cookie Choice</button>
+      </div>
+      <p class="current-choice">
+        Current saved choice: {{ currentChoice === 'not set' ? 'No choice saved yet' : currentChoice }}
+      </p>
+    </div>
+  </div>
+
+  <div class="cookie-policy-content">
+    <section class="section-card" aria-labelledby="cookies-what">
+      <div class="section-title">
+        <span class="section-dot" aria-hidden="true"></span>
+        <h2 id="cookies-what">What Are Cookies?</h2>
+      </div>
+
+      <p>
+        Cookies are small text files stored on your device when you visit a website. They help websites remember
+        useful information such as your session, preferences, and browsing choices.
+      </p>
+    </section>
+
+    <section class="section-card" aria-labelledby="cookies-use">
+      <div class="section-title">
+        <span class="section-dot" aria-hidden="true"></span>
+        <h2 id="cookies-use">How We Use Cookies</h2>
+      </div>
+
+      <p>We use cookies and similar storage technologies to:</p>
+      <ul>
+        <li>Keep core site features working properly</li>
+        <li>Remember shopping and account-related preferences</li>
+        <li>Store cookie consent choices</li>
+        <li>Improve the site experience when optional cookies are enabled in the future</li>
+      </ul>
+    </section>
+
+    <section class="section-card" aria-labelledby="cookies-types">
+      <div class="section-title">
+        <span class="section-dot" aria-hidden="true"></span>
+        <h2 id="cookies-types">Types of Cookies We Use</h2>
+      </div>
+
+      <h3>Strictly Necessary Cookies</h3>
+      <p>
+        These are required for the website to function correctly. They help with essential features such as navigation,
+        sign-in state, secure account-related actions, and cart persistence.
+      </p>
+
+      <h3>Preference Cookies</h3>
+      <p>
+        These remember useful choices such as cookie consent preferences and other site settings designed to improve
+        your experience.
+      </p>
+
+      <h3>Optional Cookies</h3>
+      <p>
+        Optional cookies may include analytics or similar tools that help us understand how visitors use the site.
+        We will ask for your permission before enabling non-essential cookies.
+      </p>
+    </section>
+
+    <section class="section-card" aria-labelledby="cookies-manage">
+      <div class="section-title">
+        <span class="section-dot" aria-hidden="true"></span>
+        <h2 id="cookies-manage">How to Manage Cookies</h2>
+      </div>
+
+      <p>
+        You can choose whether to accept or reject non-essential cookies from the consent banner shown on the site.
+        You can reopen the cookie settings at any time from this page or the footer, and you can also manage cookies through your browser settings.
+      </p>
+
+      <div class="note-box" role="note">
+        Use the buttons above to update your saved cookie choice immediately. Your current setting is shown at the top of this page.
+      </div>
+
+      <div class="note-box" role="note">
+        <strong>Important:</strong> Disabling strictly necessary cookies may affect core website features such as account access,
+        shopping flow, or saved preferences.
+      </div>
+    </section>
+
+    <section class="section-card" aria-labelledby="cookies-contact">
+      <div class="section-title">
+        <span class="section-dot" aria-hidden="true"></span>
+        <h2 id="cookies-contact">Questions About Cookies?</h2>
+      </div>
+
+      <p>If you have questions about how we use cookies or how your data is handled, contact us:</p>
+
+      <div class="contact-box">
+        <p><strong>Email:</strong> <a href="mailto:support@diasfragrance.com">support@diasfragrance.com</a></p>
+        <p><strong>Phone:</strong> <a href="tel:+18764968099">+1 (876) 496-8099</a></p>
+        <p><strong>Address:</strong> Spanish Town, Jamaica</p>
+      </div>
+    </section>
+  </div>
+</section>
+

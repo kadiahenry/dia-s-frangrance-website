@@ -1,0 +1,412 @@
+<section class="checkout-page">
+  <div class="stepper">
+    <div class="step" [class.complete]="currentStep !== 'shipping'" [class.active]="currentStep === 'shipping'">
+      <span class="step-circle">1</span>
+      <span>Shipping</span>
+    </div>
+    <div class="step-line" [class.complete]="currentStep !== 'shipping'"></div>
+    <div class="step" [class.complete]="currentStep === 'review'" [class.active]="currentStep === 'billing'">
+      <span class="step-circle">2</span>
+      <span>Billing</span>
+    </div>
+    <div class="step-line" [class.complete]="currentStep === 'review'"></div>
+    <div class="step" [class.active]="currentStep === 'review'">
+      <span class="step-circle">3</span>
+      <span>Review & Submit Order</span>
+    </div>
+  </div>
+
+  <div class="checkout-shell">
+    <section class="checkout-entry">
+      <form class="details-form" (ngSubmit)="placeOrder()" #checkoutForm="ngForm">
+        <ng-container *ngIf="currentStep === 'shipping'">
+          <div class="section-heading">
+            <p class="heading-note">If the info below is correct, continue to Billing.</p>
+            <h1>Shipping Address</h1>
+          </div>
+
+          <div class="form-group full-row">
+            <label for="addressChoice">Select a Different Address</label>
+            <select id="addressChoice" name="addressChoice">
+              <option>{{ form.addressLine1 || 'Enter your shipping address below' }}</option>
+            </select>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="firstName">First Name</label>
+              <input type="text" id="firstName" name="firstName" [(ngModel)]="form.firstName" autocomplete="given-name" required />
+            </div>
+
+            <div class="form-group">
+              <label for="lastName">Last Name</label>
+              <input type="text" id="lastName" name="lastName" [(ngModel)]="form.lastName" autocomplete="family-name" required />
+            </div>
+
+            <div class="form-group full-row">
+              <label for="addressLine1">Address 1</label>
+              <input type="text" id="addressLine1" name="addressLine1" [(ngModel)]="form.addressLine1" autocomplete="address-line1" required />
+            </div>
+
+            <div class="form-group full-row">
+              <label for="addressLine2">Address 2 <span class="optional-label">(Optional)</span></label>
+              <input type="text" id="addressLine2" name="addressLine2" [(ngModel)]="form.addressLine2" autocomplete="address-line2" />
+            </div>
+
+            <div class="form-group">
+              <label for="city">City / Town</label>
+              <input type="text" id="city" name="city" [(ngModel)]="form.city" autocomplete="address-level2" required />
+            </div>
+
+            <div class="form-group">
+              <label for="parish">Parish</label>
+              <input type="text" id="parish" name="parish" [(ngModel)]="form.parish" autocomplete="address-level1" required />
+            </div>
+
+            <div class="form-group">
+              <label for="country">Country</label>
+              <input type="text" id="country" name="country" [(ngModel)]="form.country" autocomplete="country-name" />
+            </div>
+
+            <div class="form-group">
+              <label for="phone">Phone Number</label>
+              <input type="tel" id="phone" name="phone" [(ngModel)]="form.phone" autocomplete="tel" required />
+            </div>
+          </div>
+
+          <div class="check-options">
+            <label class="check-option">
+              <input type="checkbox" name="saveToAddresses" [(ngModel)]="saveToAddresses" />
+              <span>Save to Addresses</span>
+            </label>
+
+            <label class="check-option">
+              <input type="checkbox" name="useAddressForBilling" [(ngModel)]="useAddressForBilling" />
+              <span>Use Address for Billing</span>
+            </label>
+          </div>
+
+          <div class="shipping-methods">
+            <h2>Shipping Method</h2>
+
+            <label class="delivery-option">
+              <input type="radio" name="deliveryMethod" [checked]="form.deliveryMethod === 'knutsford'" (change)="onDeliveryMethodChange('knutsford')" />
+              <span>
+                <strong>Standard</strong>
+                <small>Estimated delivery in 3-7 business days</small>
+              </span>
+              <strong>{{ 300 | currency:'JMD':'symbol':'1.2-2' }}</strong>
+            </label>
+
+            <label class="delivery-option">
+              <input type="radio" name="deliveryMethod" [checked]="form.deliveryMethod === 'postoffice'" (change)="onDeliveryMethodChange('postoffice')" />
+              <span>
+                <strong>Post Office</strong>
+                <small>Collection after dispatch confirmation</small>
+              </span>
+              <strong>{{ 300 | currency:'JMD':'symbol':'1.2-2' }}</strong>
+            </label>
+
+            <label class="delivery-option">
+              <input type="radio" name="deliveryMethod" [checked]="form.deliveryMethod === 'cod'" (change)="onDeliveryMethodChange('cod')" />
+              <span>
+                <strong>Cash on Delivery</strong>
+                <small>Pickup location selected below</small>
+              </span>
+              <strong>Varies</strong>
+            </label>
+          </div>
+
+          <div class="cod-section" *ngIf="form.deliveryMethod === 'cod'">
+            <label for="codLocation">Cash On Delivery Location</label>
+            <select id="codLocation" name="codLocation" [(ngModel)]="form.codLocation">
+              <option *ngFor="let location of codLocations" [value]="location.label">
+                {{ location.label }} ({{ location.fee | currency:'JMD':'symbol':'1.2-2' }})
+              </option>
+            </select>
+          </div>
+
+          <p class="checkout-message error" *ngIf="paymentError">{{ paymentError }}</p>
+
+          <div class="step-actions">
+            <button type="button" class="dark-btn" (click)="goToBilling()">Go to Billing</button>
+            <a routerLink="/privacy" class="privacy-link">Privacy Policy</a>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="currentStep === 'billing'">
+          <div class="section-heading">
+            <h1>Billing Address</h1>
+          </div>
+
+          <div class="info-card">
+            <p><strong>{{ form.firstName }} {{ form.lastName }}</strong></p>
+            <p>{{ form.addressLine1 }}</p>
+            <p *ngIf="form.addressLine2">{{ form.addressLine2 }}</p>
+            <p>{{ form.city }}, {{ form.parish }}</p>
+            <p>{{ form.country }}</p>
+            <p>{{ form.phone }}</p>
+            <button type="button" class="inline-link" (click)="editStep('shipping')">Edit</button>
+          </div>
+
+          <div class="form-group full-row">
+            <label for="email">Contact Information</label>
+            <input type="email" id="email" name="email" [(ngModel)]="form.email" autocomplete="email" placeholder="you@example.com" />
+          </div>
+
+          <div class="payment-section">
+            <h2>Payment Method</h2>
+
+            <div class="payment-choice-grid">
+              <button
+                type="button"
+                class="payment-choice"
+                [class.selected]="paymentMethod === 'card'"
+                (click)="onPaymentMethodChange('card')">
+                <span class="payment-choice-title">Pay With Card</span>
+                <span class="payment-icons">
+                  <span
+                    class="brand-badge"
+                    *ngFor="let card of cardBrands"
+                    [ngClass]="'brand-badge--' + card.key"
+                    [attr.aria-label]="card.label">
+                    <span class="brand-badge-text">{{ card.badge }}</span>
+                  </span>
+                </span>
+              </button>
+
+              <button
+                type="button"
+                class="payment-choice"
+                [class.selected]="paymentMethod === 'paypal'"
+                (click)="onPaymentMethodChange('paypal')">
+                <span class="payment-choice-title">PayPal</span>
+                <span class="payment-choice-copy">Pay with your PayPal account only.</span>
+              </button>
+
+              <button
+                type="button"
+                class="payment-choice"
+                [class.selected]="paymentMethod === 'cod'"
+                (click)="onPaymentMethodChange('cod')">
+                <span class="payment-choice-title">Cash on Delivery</span>
+                <span class="payment-choice-copy">Pay when your order is delivered.</span>
+              </button>
+            </div>
+
+            <div class="card-entry" *ngIf="paymentMethod === 'card'">
+              <div class="card-brand-grid">
+                <button
+                  type="button"
+                  class="card-brand"
+                  *ngFor="let brand of cardBrands"
+                  [class.selected]="selectedCardBrand === brand.key"
+                  (click)="selectCardBrand(brand.key)">
+                  <span
+                    class="brand-badge brand-badge--selectable"
+                    [ngClass]="'brand-badge--' + brand.key"
+                    [attr.aria-label]="brand.label">
+                    <span class="brand-badge-text">{{ brand.badge }}</span>
+                  </span>
+                </button>
+              </div>
+
+              <div class="form-grid">
+                <div class="form-group full-row">
+                  <label for="cardholderName">Name on Card</label>
+                  <input
+                    type="text"
+                    id="cardholderName"
+                    name="cardholderName"
+                    [(ngModel)]="cardForm.cardholderName"
+                    autocomplete="cc-name"
+                    placeholder="Name exactly as shown on card" />
+                </div>
+
+                <div class="form-group full-row">
+                  <label for="cardNumber">Card Number</label>
+                  <input
+                    type="text"
+                    id="cardNumber"
+                    name="cardNumber"
+                    [(ngModel)]="cardForm.cardNumber"
+                    (input)="formatCardNumber()"
+                    inputmode="numeric"
+                    autocomplete="cc-number"
+                    placeholder="1234 5678 9012 3456"
+                    maxlength="19" />
+                </div>
+
+                <div class="form-group">
+                  <label for="expiryMonth">Expiry Month</label>
+                  <input
+                    type="text"
+                    id="expiryMonth"
+                    name="expiryMonth"
+                    [(ngModel)]="cardForm.expiryMonth"
+                    inputmode="numeric"
+                    autocomplete="cc-exp-month"
+                    placeholder="MM"
+                    maxlength="2" />
+                </div>
+
+                <div class="form-group">
+                  <label for="expiryYear">Expiry Year</label>
+                  <input
+                    type="text"
+                    id="expiryYear"
+                    name="expiryYear"
+                    [(ngModel)]="cardForm.expiryYear"
+                    inputmode="numeric"
+                    autocomplete="cc-exp-year"
+                    placeholder="YY"
+                    maxlength="2" />
+                </div>
+
+                <div class="form-group">
+                  <label for="cvv">Security Code</label>
+                  <input
+                    type="password"
+                    id="cvv"
+                    name="cvv"
+                    [(ngModel)]="cardForm.cvv"
+                    inputmode="numeric"
+                    autocomplete="cc-csc"
+                    placeholder="CVV"
+                    maxlength="4" />
+                </div>
+              </div>
+
+              <div class="secure-note">Card checkout is separate from PayPal and uses the card details entered above.</div>
+            </div>
+
+            <div class="paypal-panel" *ngIf="paymentMethod === 'paypal'">
+              <h3>Pay with PayPal</h3>
+              <p class="payment-hint">Use PayPal to complete checkout with your PayPal account.</p>
+              <p class="payment-hint" *ngIf="isLoadingPayPal">Loading PayPal checkout...</p>
+              <div id="paypal-button-container"></div>
+            </div>
+
+            <div class="cod-panel" *ngIf="paymentMethod === 'cod'">
+              <p class="payment-hint">You will pay on delivery using the shipping method and location you selected above.</p>
+            </div>
+          </div>
+
+          <div class="form-group full-row">
+            <label for="notes">Order Notes</label>
+            <textarea id="notes" name="notes" [(ngModel)]="form.notes" rows="3" placeholder="Special instructions..."></textarea>
+          </div>
+
+          <label class="check-option consent-option">
+            <input type="checkbox" name="checkoutPrivacyConsent" [(ngModel)]="checkoutPrivacyConsent" />
+            <span>
+              I consent to Dia's Fragrances and More collecting and using my personal, shipping, and payment-related information to process this order in line with the
+              <a routerLink="/privacy" class="privacy-link-inline">Privacy Policy</a>.
+            </span>
+          </label>
+
+          <p class="checkout-message error" *ngIf="paymentError">{{ paymentError }}</p>
+          <p class="checkout-message success" *ngIf="paymentSuccess">{{ paymentSuccess }}</p>
+
+          <div class="step-actions">
+            <button type="button" class="dark-btn" (click)="goToReview()">Review Order</button>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="currentStep === 'review'">
+          <div class="section-heading">
+            <h1>Review Your Order</h1>
+          </div>
+
+          <div class="review-grid">
+            <div class="review-card">
+              <h3>Ship To</h3>
+              <p>{{ form.firstName }} {{ form.lastName }}</p>
+              <p>{{ form.addressLine1 }}</p>
+              <p *ngIf="form.addressLine2">{{ form.addressLine2 }}</p>
+              <p>{{ form.city }}, {{ form.parish }}</p>
+              <p>{{ form.country }}</p>
+              <p>{{ form.phone }}</p>
+            </div>
+
+            <div class="review-card">
+              <h3>Shipping Method</h3>
+              <p>{{ deliveryMethodLabel }}</p>
+              <p>{{ deliveryFee | currency:'JMD':'symbol':'1.2-2' }}</p>
+            </div>
+
+            <div class="review-card">
+              <h3>Bill To</h3>
+              <p>{{ form.firstName }} {{ form.lastName }}</p>
+              <p>{{ form.addressLine1 }}</p>
+              <p *ngIf="form.addressLine2">{{ form.addressLine2 }}</p>
+              <p>{{ form.city }}, {{ form.parish }}</p>
+              <p>{{ form.country }}</p>
+            </div>
+
+            <div class="review-card">
+              <h3>Payment Method</h3>
+              <p>{{ paymentMethodLabel }}</p>
+              <p *ngIf="paymentMethod === 'card'">Card payment selected.</p>
+              <p *ngIf="paymentMethod === 'paypal'">PayPal selected for payment.</p>
+              <p *ngIf="paymentMethod === 'cod'">Cash on Delivery selected.</p>
+            </div>
+          </div>
+
+          <p class="checkout-message error" *ngIf="paymentError">{{ paymentError }}</p>
+
+          <div class="step-actions">
+            <button type="button" class="dark-btn" (click)="placeOrder()">Submit Order</button>
+          </div>
+        </ng-container>
+      </form>
+    </section>
+
+    <aside class="order-panel">
+      <div class="order-card">
+        <h2>Your Order</h2>
+
+        <div class="order-lines">
+          <article class="order-line" *ngFor="let item of cartItems">
+            <div class="line-item">
+              <img [src]="item.image" [alt]="item.name" width="88" height="88" loading="lazy" decoding="async" />
+              <div class="line-copy">
+                <h3>{{ item.name }}</h3>
+                <p *ngIf="item.type">{{ item.type }}</p>
+                <p class="line-size">Qty: {{ item.quantity }}</p>
+                <p class="line-status">Shipping</p>
+              </div>
+            </div>
+            <div class="line-meta">
+              <div class="line-total">{{ item.price * item.quantity | currency:'JMD':'symbol':'1.2-2' }}</div>
+            </div>
+          </article>
+        </div>
+
+        <div class="summary-total">
+          <div class="row">
+            <span>Merchandise Subtotal</span>
+            <span>{{ subtotal | currency:'JMD':'symbol':'1.2-2' }}</span>
+          </div>
+
+          <div class="row">
+            <span>Estimated Shipping - Standard</span>
+            <span>{{ deliveryFee | currency:'JMD':'symbol':'1.2-2' }}</span>
+          </div>
+
+          <div class="row tax-row">
+            <span>Sales tax</span>
+            <span>{{ taxIncluded | currency:'JMD':'symbol':'1.2-2' }}</span>
+          </div>
+
+          <p class="tax-note">Tax is estimated and included in your listed product prices.</p>
+
+          <div class="row grand-total">
+            <span>Order total (JMD)</span>
+            <span>{{ total | currency:'JMD':'symbol':'1.2-2' }}</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>

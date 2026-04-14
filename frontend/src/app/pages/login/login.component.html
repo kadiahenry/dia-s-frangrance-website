@@ -1,0 +1,61 @@
+<app-banner
+  title="Login"
+  subtitle="Sign in to access your cart, wishlist, and account."
+  background="default"
+  [hideBreadcrumbs]="true">
+</app-banner>
+
+<section class="login-page">
+  <div class="login-card">
+
+    <h2>{{ welcomeName ? 'Welcome Back, ' + welcomeName : 'Welcome Back' }}</h2>
+    <p class="login-subtext">
+      Login to continue shopping, manage your wishlist, and pick up where you left off.
+    </p>
+
+    <form [formGroup]="loginForm" (ngSubmit)="login()">
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input
+          type="email"
+          id="email"
+          formControlName="email"
+          placeholder="Enter your email"
+          autocomplete="email"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          formControlName="password"
+          placeholder="Enter your password"
+          autocomplete="current-password"
+        />
+      </div>
+
+      <div class="login-meta-row">
+        <a routerLink="/forgot-password" class="text-link">
+          Forgot Password?
+        </a>
+      </div>
+
+      <p class="error-message" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </p>
+
+      <button type="submit" class="login-btn-main">
+        {{ isSubmitting ? 'Signing In...' : 'Login' }}
+      </button>
+
+    </form>
+
+    <p class="login-note">
+      New here? <a routerLink="/register" class="text-link">Create an account</a>
+    </p>
+
+  </div>
+</section>

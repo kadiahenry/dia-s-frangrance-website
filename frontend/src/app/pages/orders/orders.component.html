@@ -1,0 +1,75 @@
+<app-banner
+  title="My Account"
+  subtitle="Review your recent purchases and account activity."
+  background="default"
+  [hideBreadcrumbs]="false">
+</app-banner>
+
+<section class="orders-page">
+  <div class="account-shell">
+    <aside class="account-sidebar">
+      <h2>My Account</h2>
+      <nav class="account-nav">
+        <a *ngFor="let link of accountLinks"
+           [routerLink]="link.route"
+           [fragment]="link.fragment">
+          {{ link.label }}
+        </a>
+      </nav>
+    </aside>
+
+    <div class="account-main">
+      <header class="account-header compact">
+        <button type="button" class="signout-btn" (click)="signOut()">Sign Out</button>
+      </header>
+
+      <section class="content-card">
+        <div class="orders-header">
+          <div>
+            <h2>Order History</h2>
+            <p>Everything you have purchased through your account appears here.</p>
+          </div>
+          <button type="button" class="refresh-btn" (click)="loadOrders()" [disabled]="isLoading">
+            Refresh
+          </button>
+        </div>
+
+        <p class="status-message" *ngIf="isLoading">Loading your orders...</p>
+        <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
+        <p class="status-message" *ngIf="!isLoading && !errorMessage && orders.length === 0">
+          You have no order as yet.
+        </p>
+
+        <div class="order-list" *ngIf="orders.length > 0">
+          <section class="order-date-group" *ngFor="let group of groupedOrders">
+            <h3 class="date-heading">{{ group.label }}</h3>
+
+            <article class="order-card" *ngFor="let order of group.orders">
+              <div class="order-top">
+                <div>
+                  <h4>{{ order.order_number }}</h4>
+                  <p>{{ order.created_at | date:'shortTime' }}</p>
+                </div>
+                <div class="order-meta">
+                  <strong>{{ order.total | currency:'JMD':'symbol':'1.2-2' }}</strong>
+                  <span>{{ order.payment_method }} / {{ order.payment_status }}</span>
+                </div>
+              </div>
+
+              <div class="order-items">
+                <div class="order-item" *ngFor="let item of order.items">
+                  <img [src]="item.image" [alt]="item.name" width="72" height="72" loading="lazy" decoding="async">
+                  <div>
+                    <h5>{{ item.name }}</h5>
+                    <p>Qty: {{ item.qty }}</p>
+                  </div>
+                  <strong>{{ item.price | currency:'JMD':'symbol':'1.2-2' }}</strong>
+                </div>
+              </div>
+            </article>
+          </section>
+        </div>
+      </section>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,115 @@
+<app-banner
+  title="Shop Our Collection"
+  subtitle="Discover your favorites - body care made just for you."
+  background="default"
+  [hideBreadcrumbs]="false">
+</app-banner>
+
+<section class="products-layout">
+
+  <aside class="categories" aria-labelledby="category-filter-title">
+    <h3 id="category-filter-title">Categories</h3>
+
+    <ul>
+      <li *ngFor="let category of categories; trackBy: trackByCategory">
+        <button
+          type="button"
+          class="category-filter"
+          (click)="selectCategory(category)"
+          [class.active]="category === selectedCategory"
+          [attr.aria-pressed]="category === selectedCategory">
+          {{ category }}
+        </button>
+      </li>
+    </ul>
+  </aside>
+
+  <section class="products" aria-labelledby="product-list-title">
+    <h2 id="product-list-title">{{ selectedCategory }}</h2>
+
+    <div class="loading-state" *ngIf="isLoading && !hasLoadedProducts" aria-live="polite">
+      <p>Loading products...</p>
+
+      <div class="product-grid skeleton-grid" aria-hidden="true">
+        <article class="product-card skeleton-card" *ngFor="let placeholder of [1,2,3,4,5,6]">
+          <div class="skeleton-image"></div>
+          <div class="product-info">
+            <div class="skeleton-line skeleton-title"></div>
+            <div class="skeleton-line"></div>
+            <div class="skeleton-line skeleton-price"></div>
+          </div>
+          <div class="card-actions">
+            <div class="skeleton-button"></div>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <div class="search-feedback similar-results" *ngIf="searchFeedback && filteredProducts.length > 0">
+      {{ searchFeedback }}
+    </div>
+
+    <div class="search-feedback empty-results" *ngIf="searchFeedback && filteredProducts.length === 0">
+      <p>{{ searchFeedback }}</p>
+      <p *ngIf="searchSuggestions.length > 0">Suggestions: {{ searchSuggestions.join(', ') }}</p>
+      <p *ngIf="searchSuggestions.length === 0">Try a different spelling, category, or product name.</p>
+    </div>
+
+    <div class="product-grid" *ngIf="!isLoading || hasLoadedProducts">
+      <article class="product-card" *ngFor="let product of filteredProducts; trackBy: trackByProductId" [attr.aria-labelledby]="'product-name-' + product.id">
+
+        <button
+          type="button"
+          class="wishlist-btn"
+          (click)="toggleWishlist(product)"
+          [class.active]="isInWishlist(product.id)"
+          [attr.aria-pressed]="isInWishlist(product.id)"
+          [attr.aria-label]="isInWishlist(product.id) ? 'Remove ' + product.name + ' from wishlist' : 'Add ' + product.name + ' to wishlist'">
+          ♥
+        </button>
+
+        <button
+          type="button"
+          class="product-card-link"
+          (click)="viewProduct(product)"
+          [attr.aria-label]="'View details for ' + (product.name || 'product')">
+          <img
+            [src]="product.image"
+            [alt]="product.name || 'Unnamed product'"
+            width="220"
+            height="220"
+            loading="lazy"
+            decoding="async"
+          />
+
+          <div class="product-info">
+            <h3 class="product-name" [id]="'product-name-' + product.id">
+              {{ product.name || 'Product Name' }}
+            </h3>
+
+            <p class="product-type" *ngIf="product.type">
+              {{ product.type }}
+            </p>
+
+            <div class="price-stock">
+              <span class="price">{{ product.price | currency:'JMD':'symbol':'1.2-2' }}</span>
+              <span class="stock-inline">In Stock</span>
+            </div>
+          </div>
+        </button>
+
+        <div class="card-actions">
+          <button
+            type="button"
+            class="add-btn"
+            (click)="addToCart(product)">
+            Add to Cart
+          </button>
+        </div>
+
+      </article>
+
+    </div>
+  </section>
+
+</section>

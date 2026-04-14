@@ -1,0 +1,86 @@
+<section class="hero" aria-labelledby="home-hero-title">
+  <img
+    class="hero-image"
+    [src]="heroImage"
+    [attr.srcset]="heroImageSrcSet"
+    sizes="100vw"
+    alt=""
+    width="1600"
+    height="900"
+    loading="eager"
+    decoding="async"
+    fetchpriority="high"
+    aria-hidden="true">
+
+  <video *ngIf="shouldLoadHeroVideo" class="hero-video" muted autoplay loop playsinline preload="none" [poster]="heroImage" aria-hidden="true">
+    <source src="assets/videos/video.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <div class="hero-content">
+    <h1 id="home-hero-title">Glow Naturally</h1>
+    <p>Discover our newest and best-selling skincare products</p>
+    <a routerLink="/products" class="shop-btn">Shop Now</a>
+  </div>
+</section>
+
+<!-- NEW ARRIVALS -->
+<section class="section" aria-labelledby="new-arrivals-title">
+  <h2 id="new-arrivals-title">New Arrivals</h2>
+  <div class="product-grid">
+    <article class="product-card" *ngFor="let product of newArrivals; trackBy: trackByName">
+      <img
+        [src]="product.image"
+        [attr.srcset]="getCardImageSrcSet(product.image)"
+        [alt]="product.name + ' new arrival'"
+        width="260"
+        height="200"
+        sizes="(max-width: 768px) 50vw, 260px"
+        loading="lazy"
+        decoding="async">
+      <h3>{{ product.name }}</h3>
+      <p>{{ product.price | currency:'JMD':'symbol':'1.2-2' }}</p>
+    </article>
+  </div>
+</section>
+
+<!-- BEST SELLERS -->
+<section class="section alt-bg" aria-labelledby="best-sellers-title">
+  <h2 id="best-sellers-title">Best Sellers</h2>
+  <div class="product-grid">
+    <article class="product-card" *ngFor="let product of bestSellers; trackBy: trackByName">
+      <img
+        [src]="product.image"
+        [attr.srcset]="getCardImageSrcSet(product.image)"
+        [alt]="product.name + ' best seller'"
+        width="260"
+        height="200"
+        sizes="(max-width: 768px) 50vw, 260px"
+        loading="lazy"
+        decoding="async">
+      <h3>{{ product.name }}</h3>
+      <p>{{ product.price | currency:'JMD':'symbol':'1.2-2' }}</p>
+    </article>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="section" aria-labelledby="shop-category-title">
+  <h2 id="shop-category-title">Shop by Category</h2>
+  <div class="category-grid">
+    <button type="button" class="category-card" *ngFor="let category of categories; trackBy: trackByName" (click)="goToCategory(category.name)">
+      <img
+        [src]="category.image"
+        [attr.srcset]="getCardImageSrcSet(category.image)"
+        [alt]="category.name + ' category'"
+        width="320"
+        height="220"
+        sizes="(max-width: 768px) 50vw, 320px"
+        loading="lazy"
+        decoding="async">
+      <div class="overlay">
+        <h3>{{ category.name }}</h3>
+      </div>
+    </button>
+  </div>
+</section>

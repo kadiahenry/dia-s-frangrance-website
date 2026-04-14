@@ -1,0 +1,10 @@
+<section class="page-banner" [ngClass]="background" aria-label="Page banner">
+  <div class="banner-content">
+
+    <!-- ✅ Breadcrumbs show by default, hidden only if hideBreadcrumbs=true -->
+    <app-breadcrumbs *ngIf="!hideBreadcrumbs"></app-breadcrumbs>
+
+    <h1>{{ title }}</h1>
+    <p *ngIf="subtitle">{{ subtitle }}</p>
+  </div>
+</section>

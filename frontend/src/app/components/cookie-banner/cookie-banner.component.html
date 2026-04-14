@@ -1,0 +1,26 @@
+<section class="cookie-banner" *ngIf="isVisible" aria-label="Cookie consent banner">
+  <div class="cookie-copy">
+    <h2>Cookies on Dia's Fragrances and More</h2>
+    <p class="cookie-status" *ngIf="currentChoice">
+      Current choice: {{ currentChoice === 'accepted' ? 'Optional cookies accepted' : 'Optional cookies rejected' }}.
+    </p>
+    <p>
+      We use necessary cookies to keep the site working and optional cookies to improve your experience.
+      You can accept or reject non-essential cookies, and you can change this choice later. Read our
+      <a routerLink="/cookie-policy">Cookie Policy</a> and
+      <a routerLink="/privacy">Privacy Policy</a> for more information.
+    </p>
+  </div>
+
+  <div class="cookie-actions">
+    <button
+      *ngIf="currentChoice"
+      type="button"
+      class="cookie-btn tertiary"
+      (click)="closePreferences()">
+      Keep Current Choice
+    </button>
+    <button type="button" class="cookie-btn secondary" (click)="rejectCookies()">Reject Optional</button>
+    <button type="button" class="cookie-btn primary" (click)="acceptCookies()">Accept Cookies</button>
+  </div>
+</section>
