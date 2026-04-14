@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const pool = require('./db');
+const { buildProductSlug } = require('../utils/product-slug');
 
 async function tableExists(tableName) {
   const [rows] = await pool.query(`
@@ -139,11 +140,22 @@ async function ensureProductsTable() {
   await addColumnIfMissing('products', 'slug', "VARCHAR(300) NULL AFTER name");
   await addColumnIfMissing('products', 'notes', 'TEXT NULL AFTER description');
 
-  await pool.query(`
-    UPDATE products
-    SET slug = LOWER(REPLACE(TRIM(name), ' ', '-'))
-    WHERE slug IS NULL OR slug = ''
+  const [rows] = await pool.query(`
+    SELECT id, name, type, slug
+    FROM products
   `);
+
+  for (const row of rows) {
+    const nextSlug = buildProductSlug(row.name, row.type || '');
+
+    if (row.slug !== nextSlug) {
+      await pool.query(`
+        UPDATE products
+        SET slug = ?
+        WHERE id = ?
+      `, [nextSlug, row.id]);
+    }
+  }
 
   if (!await indexExists('products', 'idx_products_category_id')) {
     await pool.query(`

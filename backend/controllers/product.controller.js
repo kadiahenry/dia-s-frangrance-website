@@ -1,13 +1,6 @@
 const pool = require('../config/db');
 const seedProducts = require('../data/seed-products');
-
-function toSlug(value = '') {
-  return String(value)
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-}
+const { toSlug, buildProductSlug } = require('../utils/product-slug');
 
 const productDetailsMap = new Map(
   seedProducts.map(product => [
@@ -68,6 +61,7 @@ function mapProduct(row) {
 
   return {
     id: row.id,
+    slug: row.slug,
     name: row.name,
     type: row.type,
     price: Number(row.price),
@@ -94,6 +88,7 @@ async function getProducts(req, res, next) {
     const [rows] = await pool.query(`
       SELECT
         p.id,
+        p.slug,
         p.name,
         p.type,
         p.price,
@@ -126,6 +121,7 @@ async function getProductById(req, res, next) {
     const [rows] = await pool.query(`
       SELECT
         p.id,
+        p.slug,
         p.name,
         p.type,
         p.price,
@@ -143,6 +139,44 @@ async function getProductById(req, res, next) {
       WHERE p.id = ?
       LIMIT 1
     `, [req.params.id]);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    res.json(mapProduct(rows[0]));
+  } catch (error) {
+    next(error);
+  }
+}
+
+/**
+ * Get one product by slug
+ */
+async function getProductBySlug(req, res, next) {
+  try {
+    const [rows] = await pool.query(`
+      SELECT
+        p.id,
+        p.slug,
+        p.name,
+        p.type,
+        p.price,
+        p.image_url,
+        p.description,
+        p.notes,
+        p.stock_quantity,
+        p.is_active,
+        p.created_at,
+        p.updated_at,
+        p.category_id,
+        c.name AS category_name
+      FROM products p
+      INNER JOIN categories c ON p.category_id = c.id
+      WHERE p.slug = ?
+        AND p.is_active = TRUE
+      LIMIT 1
+    `, [req.params.slug]);
 
     if (rows.length === 0) {
       return res.status(404).json({ message: 'Product not found' });
@@ -189,7 +223,7 @@ async function createProduct(req, res, next) {
     `, [
       resolvedCategoryId,
       name,
-      toSlug(name),
+      buildProductSlug(name, type || ''),
       type || '',
       price,
       resolvedImageUrl,
@@ -202,6 +236,7 @@ async function createProduct(req, res, next) {
     const [rows] = await pool.query(`
       SELECT
         p.id,
+        p.slug,
         p.name,
         p.type,
         p.price,
@@ -271,7 +306,7 @@ async function updateProduct(req, res, next) {
     `, [
       resolvedCategoryId,
       name,
-      toSlug(name),
+      buildProductSlug(name, type || ''),
       type || '',
       price,
       resolvedImageUrl,
@@ -289,6 +324,7 @@ async function updateProduct(req, res, next) {
     const [rows] = await pool.query(`
       SELECT
         p.id,
+        p.slug,
         p.name,
         p.type,
         p.price,
@@ -394,6 +430,7 @@ async function getLowStockProducts(req, res, next) {
 module.exports = {
   getProducts,
   getProductById,
+  getProductBySlug,
   createProduct,
   updateProduct,
   deleteProduct,

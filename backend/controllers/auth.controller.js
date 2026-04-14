@@ -10,6 +10,10 @@ function normalizeEmail(email = '') {
   return email.trim().toLowerCase();
 }
 
+function pickOptionalString(value, fallback = '') {
+  return value === undefined || value === null ? fallback : String(value).trim();
+}
+
 function sanitizeUser(user) {
   return {
     id: user.id,
@@ -206,7 +210,12 @@ async function requestPasswordReset(req, res, next) {
       VALUES (?, ?, ?)
     `, [user.id, tokenHash, expiresAt]);
 
-    const frontendBaseUrl = process.env.FRONTEND_URL || process.env.CORS_ORIGIN || 'http://localhost:4200';
+    const frontendBaseUrl = (process.env.FRONTEND_URL
+      || process.env.CORS_ORIGIN
+      || 'http://localhost:4200')
+      .split(',')
+      .map(value => value.trim())
+      .find(Boolean) || 'http://localhost:4200';
     const resetUrl = `${frontendBaseUrl.replace(/\/$/, '')}/reset-password/${rawToken}`;
     const smtpConfigured = !!getSmtpConfig();
     const mailResult = await sendPasswordResetEmail({
@@ -315,17 +324,17 @@ async function getCurrentUser(req, res, next) {
 
 async function updateCurrentUser(req, res, next) {
   try {
-    const name = String(req.body.name || '').trim();
-    const phone = String(req.body.phone || '').trim();
-    const addressLine1 = String(req.body.addressLine1 || '').trim();
-    const addressLine2 = String(req.body.addressLine2 || '').trim();
-    const city = String(req.body.city || '').trim();
-    const parish = String(req.body.parish || '').trim();
-    const country = String(req.body.country || '').trim();
-    const postalCode = String(req.body.postalCode || '').trim();
-    const preferredPaymentMethod = String(req.body.preferredPaymentMethod || '').trim();
-    const currentPassword = String(req.body.currentPassword || '').trim();
-    const newPassword = String(req.body.newPassword || '').trim();
+    const name = pickOptionalString(req.body.name);
+    const phone = pickOptionalString(req.body.phone);
+    const addressLine1 = pickOptionalString(req.body.addressLine1);
+    const addressLine2 = pickOptionalString(req.body.addressLine2);
+    const city = pickOptionalString(req.body.city);
+    const parish = pickOptionalString(req.body.parish);
+    const country = pickOptionalString(req.body.country);
+    const postalCode = pickOptionalString(req.body.postalCode);
+    const preferredPaymentMethod = pickOptionalString(req.body.preferredPaymentMethod);
+    const currentPassword = pickOptionalString(req.body.currentPassword);
+    const newPassword = pickOptionalString(req.body.newPassword);
 
     const [rows] = await pool.query(`
       SELECT
@@ -357,14 +366,14 @@ async function updateCurrentUser(req, res, next) {
     }
 
     const nextName = name || user.name;
-    const nextPhone = phone || user.phone || '';
-    const nextAddressLine1 = addressLine1 || user.address_line_1 || '';
-    const nextAddressLine2 = addressLine2 || user.address_line_2 || '';
-    const nextCity = city || user.city || '';
-    const nextParish = parish || user.parish || '';
-    const nextCountry = country || user.country || 'Jamaica';
-    const nextPostalCode = postalCode || user.postal_code || '';
-    const nextPreferredPaymentMethod = preferredPaymentMethod || user.preferred_payment_method || '';
+    const nextPhone = phone;
+    const nextAddressLine1 = addressLine1;
+    const nextAddressLine2 = addressLine2;
+    const nextCity = city;
+    const nextParish = parish;
+    const nextCountry = country || 'Jamaica';
+    const nextPostalCode = postalCode;
+    const nextPreferredPaymentMethod = preferredPaymentMethod;
     let nextPassword = user.password;
 
     if (newPassword) {

@@ -15,9 +15,9 @@ const router = express.Router();
 
 router.post('/', protect, createOrder);
 router.get('/my', protect, listMyOrders);
+router.get('/admin/list', protect, adminOnly, listOrders);
 router.get('/:id', protect, adminOnly, getOrderById);
 router.put('/:id', protect, adminOnly, updateOrder);
 router.delete('/:id', protect, adminOnly, deleteOrder);
-router.get('/admin/list', protect, adminOnly, listOrders);
 
 module.exports = router;

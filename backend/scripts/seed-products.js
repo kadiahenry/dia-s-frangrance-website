@@ -2,14 +2,7 @@ require('dotenv').config();
 
 const pool = require('../config/db');
 const products = require('../data/seed-products');
-
-function toSlug(value = '') {
-  return String(value)
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-}
+const { toSlug, buildProductSlug } = require('../utils/product-slug');
 
 async function getCategoryId(categoryName) {
   const [rows] = await pool.query(`
@@ -62,7 +55,7 @@ async function upsertProduct(product) {
       WHERE id = ?
     `, [
       categoryId,
-      toSlug(product.name),
+      buildProductSlug(product.name, product.type || ''),
       product.type || '',
       product.price,
       nextImageUrl,
@@ -82,7 +75,7 @@ async function upsertProduct(product) {
   `, [
     categoryId,
     product.name,
-    toSlug(product.name),
+    buildProductSlug(product.name, product.type || ''),
     product.type || '',
     product.price,
     product.image,

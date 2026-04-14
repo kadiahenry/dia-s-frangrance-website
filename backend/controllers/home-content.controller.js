@@ -3,19 +3,19 @@ const pool = require('../config/db');
 const defaultContent = {
   heroImage: 'assets/images/backgroundpic-home.jpg',
   newArrivals: [
-    { name: 'Aloe Glow Wash', price: 1800, image: 'assets/images/backgroundpic-home.jpg' },
-    { name: 'Shea Body Butter', price: 1800, image: 'assets/images/thousand-wishes-card.jpg' },
-    { name: 'Coconut Lotion', price: 1800, image: 'assets/images/gingham-card.jpg' }
+    { name: 'In The Sun', price: 1800, image: 'assets/uploads/1774148769316-in-the-sun-set-removebg-preview.webp' },
+    { name: 'Pearberry', price: 1800, image: 'assets/uploads/1774148446103-pearberry-set.webp' },
+    { name: 'Bahamas Passionfruit', price: 1800, image: 'assets/uploads/1774983663459-bahamas-passionfruit-set--2-.webp' }
   ],
   bestSellers: [
-    { name: 'Cucumber Melon', price: 1800, image: '/uploads/1773893129547-shower-gel-cucumber-melon--1-.webp' },
+    { name: 'Cucumber Melon', price: 1800, image: 'assets/uploads/1774983545707-cucumbermelonn.webp' },
     { name: 'Thousand Wishes', price: 1800, image: 'assets/images/thousand-wishes-card.jpg' },
     { name: 'Gingham', price: 1800, image: 'assets/images/gingham-card.jpg' }
   ],
   categories: [
-    { name: 'Fragrances', image: 'assets/images/thousand-wishes-card.jpg' },
-    { name: 'Body Wash', image: 'assets/images/backgroundpic-home.jpg' },
-    { name: 'Lotion and Body Cream', image: 'assets/images/gingham-card.jpg' }
+    { name: 'Fragrances', image: 'assets/uploads/1774148463864-fragrances.webp' },
+    { name: 'Body Wash', image: 'assets/uploads/1774148750036-bodywash-removebg-preview.webp' },
+    { name: 'Lotion and Body Cream', image: 'assets/uploads/1774148480432-lotion-body-cream.webp' }
   ]
 };
 const SHOWCASE_ITEM_COUNT = 3;
@@ -87,6 +87,34 @@ function fillWithFallback(items, fallback, count) {
 function optimizeImagePath(path = '') {
   const normalizedPath = String(path).replace(/\\/g, '/');
 
+  if (normalizedPath.includes('1774148769316-in-the-sun-set-removebg-preview.webp')) {
+    return 'assets/uploads/1774148769316-in-the-sun-set-removebg-preview.webp';
+  }
+
+  if (normalizedPath.includes('1774148446103-pearberry-set.webp')) {
+    return 'assets/uploads/1774148446103-pearberry-set.webp';
+  }
+
+  if (normalizedPath.includes('1774983663459-bahamas-passionfruit-set--2-.webp')) {
+    return 'assets/uploads/1774983663459-bahamas-passionfruit-set--2-.webp';
+  }
+
+  if (normalizedPath.includes('1774983545707-cucumbermelonn.webp')) {
+    return 'assets/uploads/1774983545707-cucumbermelonn.webp';
+  }
+
+  if (normalizedPath.includes('1774148463864-fragrances.webp')) {
+    return 'assets/uploads/1774148463864-fragrances.webp';
+  }
+
+  if (normalizedPath.includes('1774148750036-bodywash-removebg-preview.webp')) {
+    return 'assets/uploads/1774148750036-bodywash-removebg-preview.webp';
+  }
+
+  if (normalizedPath.includes('1774148480432-lotion-body-cream.webp')) {
+    return 'assets/uploads/1774148480432-lotion-body-cream.webp';
+  }
+
   if (normalizedPath.endsWith('/backgroundpic.jpg') || normalizedPath.includes('backgroundpic.webp')) {
     return 'assets/images/backgroundpic-home.jpg';
   }
@@ -113,7 +141,7 @@ function normalizeShowcaseImage(name = '', imagePath = '') {
     normalizedName === 'cucumber melon'
     && (!normalizedImagePath || normalizedImagePath === 'assets/images/gingham-card.jpg')
   ) {
-    return '/uploads/1773893129547-shower-gel-cucumber-melon--1-.webp';
+    return 'assets/uploads/1774983545707-cucumbermelonn.webp';
   }
 
   return normalizedImagePath;
